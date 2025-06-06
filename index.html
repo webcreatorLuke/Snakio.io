@@ -72,50 +72,8 @@
         #gameover-btn:active {
             background: #c62828;
         }
-        #shop {
-            margin: 30px auto 0 auto;
-            background: #111;
-            padding: 16px 20px;
-            border-radius: 10px;
-            max-width: 430px;
-            box-shadow: 0 0 18px #0006;
-        }
-        #shop h2 {
-            color: #ffd700;
-            margin: 0 0 12px 0;
-            font-size: 27px;
-        }
-        .shop-btn {
-            margin: 8px 6px;
-            padding: 9px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
-            background: #222;
-            color: #ffd700;
-            border: 2px solid #ffd700;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-        }
-        .shop-btn:disabled {
-            background: #333;
-            color: #aaa;
-            border-color: #888;
-            cursor: not-allowed;
-        }
-        #shield-status {
-            font-size: 18px;
-            margin-top: 7px;
-        }
-        #shop-message {
-            color: #0f0;
-            font-size: 17px;
-            margin-top: 10px;
-            min-height: 24px;
-        }
         @media (max-width: 600px) {
             #game-canvas { width: 95vw; height: 95vw; max-width: 400px; max-height: 400px; }
-            #shop { max-width: 98vw;}
         }
     </style>
 </head>
@@ -136,14 +94,6 @@
             </div>
         </div>
     </div>
-    <div id="shop">
-        <h2>Shop</h2>
-        <button class="shop-btn" id="buy-shield-btn">Buy Shield (10 pts)</button>
-        <button class="shop-btn" id="destroy-1-btn">Destroy 1 Spike (5 pts)</button>
-        <button class="shop-btn" id="destroy-10-btn">Destroy 10 Spikes (40 pts)</button>
-        <div id="shield-status">Shield: <span id="shield-indicator" style="color:#f44336;">Inactive</span></div>
-        <div id="shop-message"></div>
-    </div>
     <!-- Audio for eating food -->
     <audio id="eat-sound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4ec9.mp3" preload="auto"></audio>
     <script>
@@ -158,13 +108,6 @@
     const leftBtn = document.getElementById('left-btn');
     const rightBtn = document.getElementById('right-btn');
 
-    // Shop
-    const buyShieldBtn = document.getElementById('buy-shield-btn');
-    const destroy1Btn = document.getElementById('destroy-1-btn');
-    const destroy10Btn = document.getElementById('destroy-10-btn');
-    const shieldStatus = document.getElementById('shield-indicator');
-    const shopMessage = document.getElementById('shop-message');
-
     // Sound
     const eatSound = document.getElementById('eat-sound');
 
@@ -176,9 +119,6 @@
     let directionLocked = false;
     let spikes = [];
     const SPIKE_COUNT = 10;
-
-    // Shop/Power-up variables
-    let shieldActive = false;
 
     function randomGridPosition() {
         return {
@@ -224,15 +164,11 @@
         direction = {x: 0, y: 0}; // Not moving at start
         score = 0;
         gameOver = false;
-        shieldActive = false;
         scoreDiv.textContent = "Score: 0";
-        setShieldUI(false);
-        shopMessage.textContent = "";
         placeSpikes();
         placeFood();
         if (gameInterval) clearInterval(gameInterval);
         gameInterval = setInterval(gameLoop, 100);
-        updateShopButtons();
         draw();
     }
 
@@ -277,17 +213,6 @@
         ctx.fillStyle = "#FFD700";
         ctx.fillRect(food.x, food.y, gridSize, gridSize);
 
-        // Draw shield effect on head if active
-        if (shieldActive) {
-            ctx.save();
-            ctx.strokeStyle = "#00e7ff";
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.arc(snake[0].x + gridSize / 2, snake[0].y + gridSize / 2, gridSize / 2 + 2, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.restore();
-        }
-
         // Draw Game Over message
         if (gameOver) {
             ctx.fillStyle = "#fff";
@@ -315,18 +240,9 @@
         if (newHead.y >= canvasSize) newHead.y = 0;
 
         // Only spikes can kill you
-        let hitSpikeIdx = spikes.findIndex(sp => sp.x === newHead.x && sp.y === newHead.y);
-        if (hitSpikeIdx !== -1) {
-            if (shieldActive) {
-                // Lose shield, destroy spike, continue
-                spikes.splice(hitSpikeIdx, 1);
-                shieldActive = false;
-                setShieldUI(false);
-                shopMessage.textContent = 'Your shield saved you!';
-            } else {
-                endGame();
-                return;
-            }
+        if (spikes.some(sp => sp.x === newHead.x && sp.y === newHead.y)) {
+            endGame();
+            return;
         }
 
         // Add new head
@@ -340,6 +256,7 @@
             eatSound.play();
             placeFood();
         } else {
+            // Snake can overlap itself, don't remove head if food eaten
             snake.pop();
         }
     }
@@ -351,7 +268,6 @@
         }
         moveSnake();
         draw();
-        updateShopButtons();
     }
 
     function endGame() {
@@ -359,50 +275,7 @@
         clearInterval(gameInterval);
         releaseHeldDirection();
         draw();
-        updateShopButtons();
     }
-
-    // --- Shop Functions ---
-    function setShieldUI(active) {
-        shieldStatus.textContent = active ? "Active" : "Inactive";
-        shieldStatus.style.color = active ? "#00e7ff" : "#f44336";
-    }
-    function updateShopButtons() {
-        buyShieldBtn.disabled = shieldActive || score < 10 || gameOver;
-        destroy1Btn.disabled = spikes.length === 0 || score < 5 || gameOver;
-        destroy10Btn.disabled = spikes.length < 1 || score < 40 || gameOver;
-    }
-    buyShieldBtn.onclick = () => {
-        if (shieldActive || score < 10) return;
-        shieldActive = true;
-        setShieldUI(true);
-        score -= 10;
-        scoreDiv.textContent = "Score: " + score;
-        shopMessage.textContent = "Shield activated!";
-        updateShopButtons();
-    };
-    destroy1Btn.onclick = () => {
-        if (spikes.length === 0 || score < 5) return;
-        // Remove a random spike
-        let idx = Math.floor(Math.random() * spikes.length);
-        spikes.splice(idx, 1);
-        score -= 5;
-        scoreDiv.textContent = "Score: " + score;
-        shopMessage.textContent = "Destroyed 1 spike!";
-        updateShopButtons();
-    };
-    destroy10Btn.onclick = () => {
-        if (spikes.length === 0 || score < 40) return;
-        let removeCount = Math.min(10, spikes.length);
-        for (let i = 0; i < removeCount; i++) {
-            let idx = Math.floor(Math.random() * spikes.length);
-            spikes.splice(idx, 1);
-        }
-        score -= 40;
-        scoreDiv.textContent = "Score: " + score;
-        shopMessage.textContent = "Destroyed 10 spikes!";
-        updateShopButtons();
-    };
 
     // --- Hold to move logic ---
     function setHeldDirection(newDir) {
@@ -410,8 +283,9 @@
         if (directionLocked) return;
         heldDirection = newDir;
         direction = newDir;
-        directionLocked = true;
+        directionLocked = true; // Prevent instant reverse
     }
+
     function releaseHeldDirection() {
         heldDirection = null;
         direction = {x: 0, y: 0};
