@@ -351,3 +351,514 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>snakio.io - Snake Game</title>
+    <style>
+        body {
+            background: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 40px;
+        }
+        #game-container {
+            display: inline-block;
+            background: #111;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px #000a;
+        }
+        #game-canvas {
+            background: #222;
+            border: 2px solid #0f0;
+            display: block;
+            margin: auto;
+            touch-action: none;
+        }
+        #score {
+            margin-top: 10px;
+            font-size: 22px;
+        }
+        #controls {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .arrows-row {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+        }
+        .arrow-btn {
+            width: 48px;
+            height: 48px;
+            font-size: 28px;
+            background: #222;
+            color: #0f0;
+            border: 2px solid #0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+            transition: background 0.2s;
+        }
+        .arrow-btn:active {
+            background: #1dff1d;
+            color: #222;
+        }
+        #gameover-btn {
+            margin-top: 18px;
+            padding: 8px 24px;
+            font-size: 20px;
+            border: none;
+            background: #f44336;
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #gameover-btn:active {
+            background: #c62828;
+        }
+        #shop {
+            margin: 30px auto 0 auto;
+            background: #111;
+            padding: 16px 20px;
+            border-radius: 10px;
+            max-width: 430px;
+            box-shadow: 0 0 18px #0006;
+        }
+        #shop h2 {
+            color: #ffd700;
+            margin: 0 0 12px 0;
+            font-size: 27px;
+        }
+        .shop-btn {
+            margin: 8px 6px;
+            padding: 9px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            background: #222;
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .shop-btn:disabled {
+            background: #333;
+            color: #aaa;
+            border-color: #888;
+            cursor: not-allowed;
+        }
+        #shield-status {
+            font-size: 18px;
+            margin-top: 7px;
+        }
+        #shop-message {
+            color: #0f0;
+            font-size: 17px;
+            margin-top: 10px;
+            min-height: 24px;
+        }
+        @media (max-width: 600px) {
+            #game-canvas { width: 95vw; height: 95vw; max-width: 400px; max-height: 400px; }
+            #shop { max-width: 98vw;}
+        }
+    </style>
+</head>
+<body>
+    <h1>snakio.io</h1>
+    <div id="game-container">
+        <canvas id="game-canvas" width="400" height="400"></canvas>
+        <div id="score">Score: 0</div>
+        <button id="gameover-btn">Game Over</button>
+        <div id="controls">
+            <div class="arrows-row">
+                <button class="arrow-btn" id="up-btn">&#8593;</button>
+            </div>
+            <div class="arrows-row">
+                <button class="arrow-btn" id="left-btn">&#8592;</button>
+                <button class="arrow-btn" id="down-btn">&#8595;</button>
+                <button class="arrow-btn" id="right-btn">&#8594;</button>
+            </div>
+        </div>
+    </div>
+    <div id="shop">
+        <h2>Shop</h2>
+        <button class="shop-btn" id="buy-shield-btn">Buy Shield (10 pts)</button>
+        <button class="shop-btn" id="destroy-1-btn">Destroy 1 Spike (5 pts)</button>
+        <button class="shop-btn" id="destroy-10-btn">Destroy 10 Spikes (40 pts)</button>
+        <div id="shield-status">Shield: <span id="shield-indicator" style="color:#f44336;">Inactive</span></div>
+        <div id="shop-message"></div>
+    </div>
+    <!-- Audio for eating food -->
+    <audio id="eat-sound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4ec9.mp3" preload="auto"></audio>
+    <script>
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    const scoreDiv = document.getElementById('score');
+    const gameoverBtn = document.getElementById('gameover-btn');
+
+    // Arrow buttons for mobile
+    const upBtn = document.getElementById('up-btn');
+    const downBtn = document.getElementById('down-btn');
+    const leftBtn = document.getElementById('left-btn');
+    const rightBtn = document.getElementById('right-btn');
+
+    // Shop
+    const buyShieldBtn = document.getElementById('buy-shield-btn');
+    const destroy1Btn = document.getElementById('destroy-1-btn');
+    const destroy10Btn = document.getElementById('destroy-10-btn');
+    const shieldStatus = document.getElementById('shield-indicator');
+    const shopMessage = document.getElementById('shop-message');
+
+    // Sound
+    const eatSound = document.getElementById('eat-sound');
+
+    // Game settings
+    const gridSize = 20;
+    const canvasSize = 400;
+    let snake, direction, food, score, gameOver, gameInterval;
+    let heldDirection = null;
+    let directionLocked = false;
+    let spikes = [];
+    const SPIKE_COUNT = 10;
+
+    // Shop/Power-up variables
+    let shieldActive = false;
+
+    function randomGridPosition() {
+        return {
+            x: Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize,
+            y: Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize
+        };
+    }
+
+    function placeFood() {
+        let valid = false;
+        let newFood;
+        while (!valid) {
+            newFood = randomGridPosition();
+            valid = (
+                !snake.some(seg => seg.x === newFood.x && seg.y === newFood.y) &&
+                !spikes.some(sp => sp.x === newFood.x && sp.y === newFood.y)
+            );
+        }
+        food = newFood;
+    }
+
+    function placeSpikes() {
+        spikes = [];
+        while (spikes.length < SPIKE_COUNT) {
+            let pos = randomGridPosition();
+            // Do not place on snake or food or duplicate
+            if (
+                !snake.some(seg => seg.x === pos.x && seg.y === pos.y) &&
+                (!food || (food.x !== pos.x || food.y !== pos.y)) &&
+                !spikes.some(sp => sp.x === pos.x && sp.y === pos.y)
+            ) {
+                spikes.push(pos);
+            }
+        }
+    }
+
+    function initGame() {
+        snake = [
+            {x: 5 * gridSize, y: 5 * gridSize},
+            {x: 4 * gridSize, y: 5 * gridSize},
+            {x: 3 * gridSize, y: 5 * gridSize}
+        ];
+        direction = {x: 0, y: 0}; // Not moving at start
+        score = 0;
+        gameOver = false;
+        shieldActive = false;
+        scoreDiv.textContent = "Score: 0";
+        setShieldUI(false);
+        shopMessage.textContent = "";
+        placeSpikes();
+        placeFood();
+        if (gameInterval) clearInterval(gameInterval);
+        gameInterval = setInterval(gameLoop, 100);
+        updateShopButtons();
+        draw();
+    }
+
+    function drawSpike(spike) {
+        // Draw a simple triangle spike
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(spike.x + gridSize/2, spike.y + 3); // top point
+        ctx.lineTo(spike.x + 3, spike.y + gridSize-3); // bottom left
+        ctx.lineTo(spike.x + gridSize-3, spike.y + gridSize-3); // bottom right
+        ctx.closePath();
+        ctx.fillStyle = "#c62828";
+        ctx.fill();
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvasSize, canvasSize);
+
+        // Draw spikes
+        for (const spike of spikes) {
+            drawSpike(spike);
+        }
+
+        // Draw snake
+        ctx.fillStyle = "#00FF00";
+        snake.forEach((segment, idx) => {
+            ctx.fillRect(segment.x, segment.y, gridSize, gridSize);
+            // Draw eyes on head
+            if (idx === 0) {
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(segment.x + 4, segment.y + 4, 4, 4);
+                ctx.fillRect(segment.x + 12, segment.y + 4, 4, 4);
+                ctx.fillStyle = "#00FF00";
+            }
+        });
+
+        // Draw food
+        ctx.fillStyle = "#FFD700";
+        ctx.fillRect(food.x, food.y, gridSize, gridSize);
+
+        // Draw shield effect on head if active
+        if (shieldActive) {
+            ctx.save();
+            ctx.strokeStyle = "#00e7ff";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(snake[0].x + gridSize / 2, snake[0].y + gridSize / 2, gridSize / 2 + 2, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // Draw Game Over message
+        if (gameOver) {
+            ctx.fillStyle = "#fff";
+            ctx.font = "36px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("Game Over!", canvasSize / 2, canvasSize / 2);
+        }
+    }
+
+    function moveSnake() {
+        // Don't move if not holding down a key/button
+        if (!direction || (direction.x === 0 && direction.y === 0)) {
+            return;
+        }
+
+        let newHead = {
+            x: snake[0].x + direction.x,
+            y: snake[0].y + direction.y
+        };
+
+        // Wrap around if out of bounds
+        if (newHead.x < 0) newHead.x = canvasSize - gridSize;
+        if (newHead.x >= canvasSize) newHead.x = 0;
+        if (newHead.y < 0) newHead.y = canvasSize - gridSize;
+        if (newHead.y >= canvasSize) newHead.y = 0;
+
+        // Only spikes can kill you
+        let hitSpikeIdx = spikes.findIndex(sp => sp.x === newHead.x && sp.y === newHead.y);
+        if (hitSpikeIdx !== -1) {
+            if (shieldActive) {
+                // Lose shield, destroy spike, continue
+                spikes.splice(hitSpikeIdx, 1);
+                shieldActive = false;
+                setShieldUI(false);
+                shopMessage.textContent = 'Your shield saved you!';
+            } else {
+                endGame();
+                return;
+            }
+        }
+
+        // Add new head
+        snake.unshift(newHead);
+
+        // Eat food
+        if (newHead.x === food.x && newHead.y === food.y) {
+            score++;
+            scoreDiv.textContent = "Score: " + score;
+            eatSound.currentTime = 0;
+            eatSound.play();
+            placeFood();
+        } else {
+            snake.pop();
+        }
+    }
+
+    function gameLoop() {
+        if (gameOver) {
+            draw();
+            return;
+        }
+        moveSnake();
+        draw();
+        updateShopButtons();
+    }
+
+    function endGame() {
+        gameOver = true;
+        clearInterval(gameInterval);
+        releaseHeldDirection();
+        draw();
+        updateShopButtons();
+    }
+
+    // --- Shop Functions ---
+    function setShieldUI(active) {
+        shieldStatus.textContent = active ? "Active" : "Inactive";
+        shieldStatus.style.color = active ? "#00e7ff" : "#f44336";
+    }
+    function updateShopButtons() {
+        buyShieldBtn.disabled = shieldActive || score < 10 || gameOver;
+        destroy1Btn.disabled = spikes.length === 0 || score < 5 || gameOver;
+        destroy10Btn.disabled = spikes.length < 1 || score < 40 || gameOver;
+    }
+    buyShieldBtn.onclick = () => {
+        if (shieldActive || score < 10) return;
+        shieldActive = true;
+        setShieldUI(true);
+        score -= 10;
+        scoreDiv.textContent = "Score: " + score;
+        shopMessage.textContent = "Shield activated!";
+        updateShopButtons();
+    };
+    destroy1Btn.onclick = () => {
+        if (spikes.length === 0 || score < 5) return;
+        // Remove a random spike
+        let idx = Math.floor(Math.random() * spikes.length);
+        spikes.splice(idx, 1);
+        score -= 5;
+        scoreDiv.textContent = "Score: " + score;
+        shopMessage.textContent = "Destroyed 1 spike!";
+        updateShopButtons();
+    };
+    destroy10Btn.onclick = () => {
+        if (spikes.length === 0 || score < 40) return;
+        let removeCount = Math.min(10, spikes.length);
+        for (let i = 0; i < removeCount; i++) {
+            let idx = Math.floor(Math.random() * spikes.length);
+            spikes.splice(idx, 1);
+        }
+        score -= 40;
+        scoreDiv.textContent = "Score: " + score;
+        shopMessage.textContent = "Destroyed 10 spikes!";
+        updateShopButtons();
+    };
+
+    // --- Hold to move logic ---
+    function setHeldDirection(newDir) {
+        if (gameOver) return;
+        if (directionLocked) return;
+        heldDirection = newDir;
+        direction = newDir;
+        directionLocked = true;
+    }
+    function releaseHeldDirection() {
+        heldDirection = null;
+        direction = {x: 0, y: 0};
+        directionLocked = false;
+    }
+
+    // Mobile on-screen controls (hold to move: use touchstart/touchend)
+    upBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: 0, y: -gridSize}); });
+    upBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
+    downBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: 0, y: gridSize}); });
+    downBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
+    leftBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: -gridSize, y: 0}); });
+    leftBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
+    rightBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: gridSize, y: 0}); });
+    rightBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
+
+    // Also support mouse for onscreen arrows (for desktop)
+    upBtn.addEventListener('mousedown', e => { setHeldDirection({x: 0, y: -gridSize}); });
+    upBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
+    upBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
+    downBtn.addEventListener('mousedown', e => { setHeldDirection({x: 0, y: gridSize}); });
+    downBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
+    downBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
+    leftBtn.addEventListener('mousedown', e => { setHeldDirection({x: -gridSize, y: 0}); });
+    leftBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
+    leftBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
+    rightBtn.addEventListener('mousedown', e => { setHeldDirection({x: gridSize, y: 0}); });
+    rightBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
+    rightBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
+
+    // Keyboard controls: Arrow keys and WASD (hold to move)
+    window.addEventListener('keydown', e => {
+        if (gameOver) return;
+        let key = e.key.toLowerCase();
+        let newDir = null;
+        if ((key === "arrowup" || key === "w")) newDir = {x: 0, y: -gridSize};
+        else if ((key === "arrowdown" || key === "s")) newDir = {x: 0, y: gridSize};
+        else if ((key === "arrowleft" || key === "a")) newDir = {x: -gridSize, y: 0};
+        else if ((key === "arrowright" || key === "d")) newDir = {x: gridSize, y: 0};
+        if (newDir) setHeldDirection(newDir);
+    });
+    window.addEventListener('keyup', e => {
+        let key = e.key.toLowerCase();
+        if (
+            key === "arrowup" || key === "w" ||
+            key === "arrowdown" || key === "s" ||
+            key === "arrowleft" || key === "a" ||
+            key === "arrowright" || key === "d"
+        ) {
+            releaseHeldDirection();
+        }
+    });
+
+    // Game Over button
+    gameoverBtn.addEventListener('click', () => {
+        if (!gameOver) {
+            endGame();
+        }
+    });
+
+    // Start game
+    initGame();
+    </script>
+</body>
+</html>
