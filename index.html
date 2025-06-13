@@ -72,8 +72,89 @@
         #gameover-btn:active {
             background: #c62828;
         }
+        #open-shop-btn {
+            margin: 30px auto 0 auto;
+            padding: 10px 30px;
+            font-size: 20px;
+            border-radius: 8px;
+            background: #ffd700;
+            color: #222;
+            border: 2px solid #ffd700;
+            cursor: pointer;
+            display: block;
+        }
+        #shop-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #0009;
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        #shop-modal-content {
+            background: #222;
+            padding: 30px 26px 24px 26px;
+            border-radius: 18px;
+            box-shadow: 0 0 40px #000b;
+            max-width: 370px;
+            width: 95vw;
+            text-align: center;
+            position: relative;
+        }
+        #shop-modal h2 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 27px;
+        }
+        #shop-coins {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .shop-btn {
+            margin: 8px 6px 14px 6px;
+            padding: 9px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            background: #222;
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            width: 100%;
+            display: block;
+        }
+        .shop-btn:disabled {
+            background: #333;
+            color: #aaa;
+            border-color: #888;
+            cursor: not-allowed;
+        }
+        #shield-status {
+            font-size: 18px;
+            margin-top: 7px;
+        }
+        #shop-msg {
+            color: #0f0;
+            font-size: 17px;
+            margin-top: 10px;
+            min-height: 24px;
+        }
+        #close-shop-btn {
+            margin-top: 10px;
+            padding: 8px 25px;
+            font-size: 18px;
+            border-radius: 6px;
+            background: #ffd700;
+            color: #222;
+            border: none;
+            cursor: pointer;
+        }
         @media (max-width: 600px) {
             #game-canvas { width: 95vw; height: 95vw; max-width: 400px; max-height: 400px; }
+            #shop-modal-content { max-width: 98vw;}
         }
     </style>
 </head>
@@ -94,24 +175,185 @@
             </div>
         </div>
     </div>
+    <button id="open-shop-btn">Open Shop 🛒</button>
+    <div id="shop-modal">
+        <div id="shop-modal-content">
+            <h2>Shop</h2>
+            <div id="shop-coins">Coins: 0</div>
+            <div id="shop-items"></div>
+            <div id="shield-status">Shield: <span id="shield-indicator" style="color:#f44336;">Inactive</span></div>
+            <div id="shop-msg"></div>
+            <button id="close-shop-btn">Close</button>
+        </div>
+    </div>
     <!-- Audio for eating food -->
     <audio id="eat-sound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4ec9.mp3" preload="auto"></audio>
     <script>
+    // --- SHOP LOGIC ---
+    const shopItems = [
+      {
+        id: "shield",
+        name: "Shield",
+        desc: "Protects you from one spike hit.",
+        icon: "🛡️",
+        price: 15,
+        type: "powerup"
+      },
+      {
+        id: "destroy-1",
+        name: "Destroy 1 Spike",
+        desc: "Removes a random spike from the map.",
+        icon: "💥",
+        price: 8,
+        type: "action"
+      },
+      {
+        id: "destroy-10",
+        name: "Destroy 10 Spikes",
+        desc: "Removes up to 10 random spikes.",
+        icon: "💣",
+        price: 60,
+        type: "action"
+      }
+    ];
+
+    // Persistent coins
+    function getCoins() {
+        return parseInt(localStorage.getItem('snake_coins') || "0");
+    }
+    function setCoins(val) {
+        localStorage.setItem('snake_coins', val);
+        updateShopCoinsUI();
+    }
+    function addCoins(val) {
+        setCoins(getCoins() + val);
+    }
+
+    const openShopBtn = document.getElementById("open-shop-btn");
+    const shopModal = document.getElementById("shop-modal");
+    const shopModalContent = document.getElementById("shop-modal-content");
+    const closeShopBtn = document.getElementById("close-shop-btn");
+    const shopItemsDiv = document.getElementById("shop-items");
+    const shopCoinsDiv = document.getElementById("shop-coins");
+    const shopMsg = document.getElementById("shop-msg");
+    const shieldStatus = document.getElementById('shield-indicator');
+
+    let shieldActive = false;
+
+    openShopBtn.onclick = () => {
+        renderShop();
+        shopModal.style.display = "flex";
+    }
+    closeShopBtn.onclick = () => {
+        shopModal.style.display = "none";
+        shopMsg.textContent = "";
+    }
+    shopModal.onclick = function(e) {
+        if (e.target === shopModal) {
+            shopModal.style.display = "none";
+            shopMsg.textContent = "";
+        }
+    }
+    function updateShopCoinsUI() {
+        shopCoinsDiv.textContent = "Coins: " + getCoins();
+    }
+    function renderShop() {
+        updateShopCoinsUI();
+        shopItemsDiv.innerHTML = "";
+        shopItems.forEach(item => {
+            // Determine if item is available
+            let disabled = false;
+            let owned = false;
+            let status = "";
+            if (item.id === "shield" && shieldActive) {
+                disabled = true;
+                owned = true;
+                status = "Equipped";
+            }
+            if (getCoins() < item.price) {
+                disabled = true;
+                status = status || "Not enough coins";
+            }
+            // Build item UI
+            const btn = document.createElement("button");
+            btn.className = "shop-btn";
+            btn.disabled = disabled;
+            btn.innerHTML = `<span style="font-size:26px;vertical-align:middle;">${item.icon}</span> 
+                <b>${item.name}</b> - ${item.price} <span style="color:#ffd700;">🪙</span><br>
+                <span style="font-size:15px;color:#ffe066">${item.desc}</span>
+                <br><span style="font-size:14px;color:${owned?'#0ff':'#f66'}">${status}</span>`;
+            btn.onclick = () => buyShopItem(item.id);
+            shopItemsDiv.appendChild(btn);
+        });
+        setShieldUI(shieldActive);
+    }
+    function showShopMsg(msg, color="#0f0") {
+        shopMsg.textContent = msg;
+        shopMsg.style.color = color;
+        setTimeout(() => {shopMsg.textContent = "";}, 1600);
+    }
+    function setShieldUI(active) {
+        shieldStatus.textContent = active ? "Active" : "Inactive";
+        shieldStatus.style.color = active ? "#00e7ff" : "#f44336";
+    }
+    function updateShopButtons() {
+        // No-op for modal version; handled on modal open/render
+    }
+    function buyShopItem(itemId) {
+        const coins = getCoins();
+        const item = shopItems.find(i=>i.id===itemId);
+        if (!item) return;
+        if (coins < item.price) {
+            showShopMsg("Not enough coins!", "#f66");
+            return;
+        }
+        if (itemId === "shield") {
+            if (shieldActive) {
+                showShopMsg("Shield already active!", "#0ff");
+                return;
+            }
+            shieldActive = true;
+            setCoins(coins - item.price);
+            setShieldUI(true);
+            showShopMsg("Shield equipped!");
+        } else if (itemId === "destroy-1") {
+            if (spikes.length === 0) {
+                showShopMsg("No spikes to destroy", "#f66");
+                return;
+            }
+            let idx = Math.floor(Math.random() * spikes.length);
+            spikes.splice(idx, 1);
+            setCoins(coins - item.price);
+            showShopMsg("Destroyed 1 spike!");
+        } else if (itemId === "destroy-10") {
+            if (spikes.length === 0) {
+                showShopMsg("No spikes to destroy", "#f66");
+                return;
+            }
+            let removeCount = Math.min(10, spikes.length);
+            for (let i = 0; i < removeCount; i++) {
+                let idx = Math.floor(Math.random() * spikes.length);
+                spikes.splice(idx, 1);
+            }
+            setCoins(coins - item.price);
+            showShopMsg("Destroyed 10 spikes!");
+        }
+        renderShop();
+        draw();
+    }
+
+    // --- SNAKE GAME LOGIC ---
+
     const canvas = document.getElementById('game-canvas');
     const ctx = canvas.getContext('2d');
     const scoreDiv = document.getElementById('score');
     const gameoverBtn = document.getElementById('gameover-btn');
-
-    // Arrow buttons for mobile
     const upBtn = document.getElementById('up-btn');
     const downBtn = document.getElementById('down-btn');
     const leftBtn = document.getElementById('left-btn');
     const rightBtn = document.getElementById('right-btn');
-
-    // Sound
     const eatSound = document.getElementById('eat-sound');
 
-    // Game settings
     const gridSize = 20;
     const canvasSize = 400;
     let snake, direction, food, score, gameOver, gameInterval;
@@ -144,7 +386,6 @@
         spikes = [];
         while (spikes.length < SPIKE_COUNT) {
             let pos = randomGridPosition();
-            // Do not place on snake or food or duplicate
             if (
                 !snake.some(seg => seg.x === pos.x && seg.y === pos.y) &&
                 (!food || (food.x !== pos.x || food.y !== pos.y)) &&
@@ -164,7 +405,9 @@
         direction = {x: 0, y: 0}; // Not moving at start
         score = 0;
         gameOver = false;
+        shieldActive = false;
         scoreDiv.textContent = "Score: 0";
+        setShieldUI(false);
         placeSpikes();
         placeFood();
         if (gameInterval) clearInterval(gameInterval);
@@ -173,12 +416,11 @@
     }
 
     function drawSpike(spike) {
-        // Draw a simple triangle spike
         ctx.save();
         ctx.beginPath();
-        ctx.moveTo(spike.x + gridSize/2, spike.y + 3); // top point
-        ctx.lineTo(spike.x + 3, spike.y + gridSize-3); // bottom left
-        ctx.lineTo(spike.x + gridSize-3, spike.y + gridSize-3); // bottom right
+        ctx.moveTo(spike.x + gridSize/2, spike.y + 3);
+        ctx.lineTo(spike.x + 3, spike.y + gridSize-3);
+        ctx.lineTo(spike.x + gridSize-3, spike.y + gridSize-3);
         ctx.closePath();
         ctx.fillStyle = "#c62828";
         ctx.fill();
@@ -191,16 +433,13 @@
     function draw() {
         ctx.clearRect(0, 0, canvasSize, canvasSize);
 
-        // Draw spikes
         for (const spike of spikes) {
             drawSpike(spike);
         }
 
-        // Draw snake
         ctx.fillStyle = "#00FF00";
         snake.forEach((segment, idx) => {
             ctx.fillRect(segment.x, segment.y, gridSize, gridSize);
-            // Draw eyes on head
             if (idx === 0) {
                 ctx.fillStyle = "#fff";
                 ctx.fillRect(segment.x + 4, segment.y + 4, 4, 4);
@@ -209,11 +448,19 @@
             }
         });
 
-        // Draw food
         ctx.fillStyle = "#FFD700";
         ctx.fillRect(food.x, food.y, gridSize, gridSize);
 
-        // Draw Game Over message
+        if (shieldActive) {
+            ctx.save();
+            ctx.strokeStyle = "#00e7ff";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(snake[0].x + gridSize / 2, snake[0].y + gridSize / 2, gridSize / 2 + 2, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
         if (gameOver) {
             ctx.fillStyle = "#fff";
             ctx.font = "36px Arial";
@@ -223,7 +470,6 @@
     }
 
     function moveSnake() {
-        // Don't move if not holding down a key/button
         if (!direction || (direction.x === 0 && direction.y === 0)) {
             return;
         }
@@ -233,30 +479,34 @@
             y: snake[0].y + direction.y
         };
 
-        // Wrap around if out of bounds
         if (newHead.x < 0) newHead.x = canvasSize - gridSize;
         if (newHead.x >= canvasSize) newHead.x = 0;
         if (newHead.y < 0) newHead.y = canvasSize - gridSize;
         if (newHead.y >= canvasSize) newHead.y = 0;
 
-        // Only spikes can kill you
-        if (spikes.some(sp => sp.x === newHead.x && sp.y === newHead.y)) {
-            endGame();
-            return;
+        let hitSpikeIdx = spikes.findIndex(sp => sp.x === newHead.x && sp.y === newHead.y);
+        if (hitSpikeIdx !== -1) {
+            if (shieldActive) {
+                spikes.splice(hitSpikeIdx, 1);
+                shieldActive = false;
+                setShieldUI(false);
+                showShopMsg('Your shield saved you!');
+            } else {
+                endGame();
+                return;
+            }
         }
 
-        // Add new head
         snake.unshift(newHead);
 
-        // Eat food
         if (newHead.x === food.x && newHead.y === food.y) {
             score++;
             scoreDiv.textContent = "Score: " + score;
             eatSound.currentTime = 0;
             eatSound.play();
+            addCoins(2); // 2 coins per food
             placeFood();
         } else {
-            // Snake can overlap itself, don't remove head if food eaten
             snake.pop();
         }
     }
@@ -277,22 +527,19 @@
         draw();
     }
 
-    // --- Hold to move logic ---
     function setHeldDirection(newDir) {
         if (gameOver) return;
         if (directionLocked) return;
         heldDirection = newDir;
         direction = newDir;
-        directionLocked = true; // Prevent instant reverse
+        directionLocked = true;
     }
-
     function releaseHeldDirection() {
         heldDirection = null;
         direction = {x: 0, y: 0};
         directionLocked = false;
     }
 
-    // Mobile on-screen controls (hold to move: use touchstart/touchend)
     upBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: 0, y: -gridSize}); });
     upBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
     downBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: 0, y: gridSize}); });
@@ -302,7 +549,6 @@
     rightBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: gridSize, y: 0}); });
     rightBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
 
-    // Also support mouse for onscreen arrows (for desktop)
     upBtn.addEventListener('mousedown', e => { setHeldDirection({x: 0, y: -gridSize}); });
     upBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
     upBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
@@ -316,7 +562,6 @@
     rightBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
     rightBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
 
-    // Keyboard controls: Arrow keys and WASD (hold to move)
     window.addEventListener('keydown', e => {
         if (gameOver) return;
         let key = e.key.toLowerCase();
@@ -339,7 +584,6 @@
         }
     });
 
-    // Game Over button
     gameoverBtn.addEventListener('click', () => {
         if (!gameOver) {
             endGame();
