@@ -1,970 +1,599 @@
 <!DOCTYPE html>
-<html lang="en-us">
-
+<html lang="en">
 <head>
-  <title>Play Snake Online | Snake.io</title>
-  <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" id="Viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Snake.io is a fun online multiplayer game to battle worms as you slither for survival. Learn to play this new free competitive snake battle royale with friends!" />
-<meta property="og:description" content="Snake.io is a fun online multiplayer game to battle worms as you slither for survival. Learn to play this new free competitive snake battle royale with friends!" />
-<meta name="keywords" content="snakeio, snake io, snake, snakes, io, .io games, worm, worms, game, games, web game, html5, fun, free, cool, popular, kooapps, slitherio, slither, snack, snak, bored, job, work, working" />
-<meta name="insight-app-sec-validation" content="2ef0b86b-e365-4d64-8dbd-6513e4a353f1">
-<meta property="og:type" content="website" />
-<meta property="og:title" content="snake.io" />
-<meta property="og:title" content="Play Snake Online" />
-<meta property="og:site_name" content="snake.io" />
-<meta property="og:image" content="https://snake.io/app_icon_snakeio.png" />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:image:width" content="205" />
-<meta property="og:image:height" content="205" />
-<meta property="og:image:alt" content="A free online multiplayer game where you battle other worms for survival." />
-<meta property="og:locale" content="en_US" />
-<meta property="fb:app_id" content="704560973020244" />
-<meta property="fb:pages" content="1011596922228160">
-
-<meta name="twitter:title" content="Play Snake Online" />
-<meta name="twitter:card" content="app">
-<meta name="twitter:site" content="@snakeiogame">
-<meta name="twitter:description" content="Snake.io is a fun online multiplayer game to battle worms as you slither for survival. Learn to play this new free competitive snake battle royale with friends!">
-<meta name="twitter:app:country" content="US">
-<meta name="twitter:app:name:iphone" content="Snake.io">
-<meta name="twitter:app:id:iphone" content="1104692136">
-<meta name="twitter:app:url:iphone" content="https://link.kooapps.com/snake.ioappstore">
-<meta name="twitter:app:name:ipad" content="Snake.io">
-<meta name="twitter:app:id:ipad" content="1104692136">
-<meta name="twitter:app:url:ipad" content="https://link.kooapps.com/snake.ioappstore">
-<meta name="twitter:app:name:googleplay" content=“Snake.io”>
-<meta name="twitter:app:id:googleplay" content="com.amelosinteractive.snake">
-<meta name="twitter:app:url:googleplay" content="https://link.kooapps.com/snake.ioplaystore">
-
-<meta name='robots' content='index,follow' />
-<meta name="apple-itunes-app" content="https://apps.apple.com/us/app/snake-io-fun-online-slither/id1104692136" />
-
-    <meta name="twitter:url" content="https://snake.io" />
-    <meta property="og:url" content="https://snake.io" />
-    <meta name="url" content="https://snake.io" />
-    <link rel="canonical" href="https://snake.io">
-
-<link rel="apple-touch-icon" sizes="57x57" href="apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<script type="application/ld+json">
-    {
-        "@context": "https://schema.org/",
-        "@type": "Game",
-        "image": "https://snake.io/assets/design/home/app_icons/snake_io.png",
-        "name": "Snake.io",
-        "url": "https://snake.io",
-        "genre": "Multiplayer, Arcade",
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.4",
-            "bestRating": "5",
-            "ratingCount": "987111"
+    <meta charset="UTF-8">
+    <title>snakio.io - Snake Game</title>
+    <style>
+        body {
+            background: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 40px;
         }
-    }
-</script>
-<script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [{
-                "@type": "Question",
-                "name": "Is Snake.io bots or real players?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Snake.io is a multiplayer online game where you compete in real-time with other players to be on top of the leaderboard."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is Snake.io a free game?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Snake.io is a free-to-play online game. It is available on the App Store, Google Play, Apple Watch, and any Web Browser."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can you play Snake.io on Nintendo Switch?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes! Snake.io is available and can be purchased on the Nintendo Switch eShop."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I play Snake.io on PC?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes, Snake.io is available on PC. Just use any web browser and go to snake.io."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What's the difference between Snake.io and Slither.io?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Unlike Slither.io, Snake.io features a diverse cast of characters from different worlds and thematics. Snake.io also regularly has exciting events introducing new snakes and an active online community!"
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How can I eat other Snakes?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "To be able to eat other Snakes, you need to bump their heads onto your body. Get them to run into you, and you can collect their pellets when they disappear!"
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I play with Friends?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes, Snake.io is best enjoyed with friends. Go to Snake.io and compete with each other to see who will get the highest score!"
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is Snake.io real-time multiplayer?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Snake.io is a multiplayer online game where you compete in real-time with other players to be on top of the leaderboard."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I play Snake.io offline?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Snake.io can be played offline but is best experienced online."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How do I download Snake io?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Snake.io is a free-to-play online game. It is available on the App Store, Google Play, Apple Watch, and any Web Browser."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is snake Io online or bots?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Snake.io is a multiplayer online game where you compete in real-time with other players to be on top of the leaderboard."
-                }
-            }
-        ]
-    }
-</script>
-
-<script>
-    function userOS() {
-        var os = "Unknown";
-
-        if (navigator.userAgent.indexOf("Win") != -1) {
-            os = "Windows";
-        } else if (navigator.userAgent.indexOf("Mac") != -1) {
-            os = "Mac";
+        #game-container {
+            display: inline-block;
+            background: #111;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px #000a;
         }
-        if (navigator.userAgent.indexOf("X11") != -1) {
-            os = "Unix";
+        #game-canvas {
+            background: #222;
+            border: 2px solid #0f0;
+            display: block;
+            margin: auto;
+            touch-action: none;
         }
-        if (navigator.userAgent.indexOf("Linux") != -1) {
-            os = "Linux";
+        #score {
+            margin-top: 10px;
+            font-size: 22px;
         }
-
-        return os;
-    }
-
-    function onclickStoreBtn(event) {
-        event.preventDefault();
-
-        var sourcePage = event.target.dataset.sourcePage;
-        var utmCampaign = event.target.dataset.utmCampaign;
-        var isIos = event.target.dataset.store === "apple-app-store";
-
-        var link = isIos ?
-            "https://apps.apple.com/us/app/snake-io-fun-online-slither/id1104692136?utm_campaign=" :
-            "https://play.google.com/store/apps/details?id=com.amelosinteractive.snake&utm_campaign=";
-        link = link + utmCampaign;
-
-        var eventData = {
-            source_page: sourcePage,
-            platform: isIos ? "iOS" : "Android",
-            store_link: link
-        };
-
-        googleAnalytics.logEvent("download_button_click", eventData);
-
-        window.open(link);
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        Modernizr.on("webp", function(result) {
-            if (result) return; // webp is supported
-
-            var storeBadgeImages = document.querySelectorAll(".store-badge");
-            for (var i = 0; i < storeBadgeImages.length; i++) {
-                var storeBadge = storeBadgeImages[i];
-                storeBadge.src = storeBadge.src.replace(".webp", ".png");
-            }
-        });
-
-        // add eurostile font  
-        var linkEurostile = document.createElement("link");
-        linkEurostile.rel = "stylesheet";
-        linkEurostile.href = "assets/css/eurostile-extended.css";
-        document.head.appendChild(linkEurostile);
-    });
-
-    function onBootstrapStylesheetError(target) {
-        target.removeAttribute("integrity");
-        target.removeAttribute("crossorigin");
-        target.href = "assets/bootstrap/5.3.3/bootstrap.min.css"
-    }
-</script>
-<script src="assets/js/googleAnalyticsPlugin.js"></script>
-<script src="https://www.googletagmanager.com/gtag/js?id=G-RPMY8E6Z7B" onload='googleAnalytics.initialize("1.3.20")'></script>
-
-<link rel="stylesheet" href="assets/css/main.min.css?v=1.3.20">
-<!-- Prefetch and preconnect Google and Amazon Ads -->
-<link rel="preconnect dns-prefetch" href="https://smartadserver.com/">
-<link rel="preconnect dns-prefetch" href="https://richaudience.com/en/publishers/">
-<link rel="preconnect dns-prefetch" href="https://platform.33across.com/sessions/new">
-<link rel="preconnect dns-prefetch" href="https://www.sovrn.com/">
-<link rel="preconnect dns-prefetch" href="https://www.onetag.com/">
-<link rel="preconnect dns-prefetch" href="https://www.moat.com/">
-<link rel="preconnect dns-prefetch" href="https://improvedigital.com/">
-<link rel="preconnect dns-prefetch" href="https://www.xandr.com/">
-<link rel="preconnect dns-prefetch" href="https://pubmatic.com/">
-<link rel="preconnect dns-prefetch" href="https://triplelift.com/">
-<link rel="preconnect dns-prefetch" href="https://www.magnite.com/">
-<link rel="preconnect dns-prefetch" href="https://gumgum.com/">
-<!-- Google Ads API -->
-<script async  data-ad-frequency-hint="30s" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7799788185947239" crossorigin="anonymous"></script>
-<script>
-    window.adsbygoogle = window.adsbygoogle || [];
-    var adBreak = adConfig = function(o) {
-        adsbygoogle.push(o);
-    }
-</script>
-<!-- Preload images -->
-<link rel="preload" fetchpriority="high" as="image" href="assets/design/menu_open.png" />
-<link rel="preload" fetchpriority="high" as="image" href="assets/design/menu_close.png" />
-<link rel="preload" fetchpriority="high" as="image" href="assets/design/bg/bg.png" />
-
-<script src="assets/sdks/firebase/10.11.1/firebase-app-compat.js"></script>
-<script src="assets/sdks/firebase/10.11.1/firebase-analytics-compat.js"></script>
-<script src="assets/sdks/firebase/10.11.1/firebase-messaging-compat.js"></script><script src="assets/js/googleFcmPlugin.js?v=1.3.20"></script>
-<script>
-    googleFcmPlugin.init("1.3.20",
-        {
-    "apiKey": "AIzaSyD8dE6fmLmLa84kbG78PrFBy2dlT6rHxbk",
-    "authDomain": "snakeio-86cad.firebaseapp.com",
-    "databaseURL": "https://snakeio-86cad.firebaseio.com",
-    "projectId": "snakeio",
-    "storageBucket": "snakeio.appspot.com",
-    "messagingSenderId": "715834620584",
-    "appId": "1:715834620584:web:5d9410c2aecd90e6dee09d",
-    "measurementId": "G-RPMY8E6Z7B",
-    "name": "FirebaseWebConfig",
-    "hideFlags": 0
-})
-</script>
-
-<script src="assets/js/modernizr-custom.js"></script>
-<script type="text/javascript" src="assets/js/jquery-3.7.1.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" onerror="onBootstrapStylesheetError(this)" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">  <!-- Preload LCP Images -->
-  <link rel="preload" fetchpriority="high" as="image" href="assets/design/home/btn_read-comic.webp?v=1.3.20" type="image/webp">
-  <link rel="stylesheet" href="assets/css/style.css?v=1.3.20">
-  <link rel="stylesheet" href="TemplateData/style.css">
-
-  <script src="assets/js/analyticsWebPlugin.js?v=1.3.20"></script>
-  <script src="assets/js/googleAdsApiPlugin.js?v=1.3.20"></script>
-
-  <script>
-    /* Light YouTube Embeds by @labnol */
-    /* Web: https://www.labnol.org/ */
-    // https://codepen.io/labnol/pen/vYXYrOW
-
-    function labnolIframe(div) {
-      var iframe = document.createElement("iframe");
-      iframe.setAttribute("src", "https://www.youtube.com/embed/" + div.dataset.id + "?autoplay=1&rel=0");
-      iframe.setAttribute("frameborder", "0");
-      iframe.setAttribute("allowfullscreen", "1");
-      iframe.setAttribute("allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
-      div.parentNode.replaceChild(iframe, div);
-    }
-
-    function createComicBanner(bannerIndex) {
-      var banner = document.createElement("img");
-
-      banner.dataset.bannerIndex = bannerIndex;
-      banner.classList.add("comics-chapter-banner");
-      banner.src = `assets/design/home/comics_banners/comic-banner_${bannerIndex + 1}.webp?v=1.3.20`;
-      banner.alt = `Comics Banner #${bannerIndex + 1}`;
-
-      return banner;
-    }
-
-    var TOTAL_COMICS_CHAPTER_BANNERS = 16;
-
-    function comicsChapterBannersLoop(event) {
-      setInterval(function() {
-        var activeBanner = document.querySelector('.slide-up-animation.comics-chapter-banner');
-        if (!activeBanner) {
-          return;
+        #controls {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
         }
-
-        var currentBannerIndex = -1;
-        currentBannerIndex = activeBanner.dataset.bannerIndex;
-        currentBannerIndex = currentBannerIndex !== undefined ? parseInt(currentBannerIndex) : -1;
-        if (currentBannerIndex === -1) return;
-
-        var nextBannerIndex = (currentBannerIndex + 1) % TOTAL_COMICS_CHAPTER_BANNERS;
-
-        var nextBanner = document.querySelector(`.comics-chapter-banner[data-banner-index="${nextBannerIndex}"]`);
-
-        var comicsBannerContainer = document.getElementById("comicsBanner");
-
-        if (!nextBanner) {
-          nextBanner = createComicBanner(nextBannerIndex);
-          comicsBannerContainer.appendChild(nextBanner);
+        .arrows-row {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
         }
-
-        activeBanner.classList.remove("slide-up-animation");
-        nextBanner.classList.add("slide-up-animation");
-        // PRELOADING: check if loaded banners is equal to total number of comics banners
-        var loadedBanners = document.querySelectorAll(".comics-chapter-banner")
-        if (TOTAL_COMICS_CHAPTER_BANNERS === loadedBanners.length) {
-          return;
+        .arrow-btn {
+            width: 48px;
+            height: 48px;
+            font-size: 28px;
+            background: #222;
+            color: #0f0;
+            border: 2px solid #0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+            transition: background 0.2s;
         }
-        // load 5 next panels
-        var preloadedBanner = 0;
-        var preloadBannerIndex = parseInt(loadedBanners[loadedBanners.length - 1].dataset.bannerIndex); // get the index of the last banner loaded
-        while (preloadedBanner <= 5) {
-          preloadBannerIndex = (preloadBannerIndex + 1) % TOTAL_COMICS_CHAPTER_BANNERS;
-          var preloadBanner = document.querySelector(`.comics-chapter-banner[data-banner-index="${preloadBannerIndex}"]`);
-          if (!preloadBanner) {
-            preloadBanner = createComicBanner(preloadBannerIndex);
-            comicsBannerContainer.appendChild(preloadBanner);
-          }
-          ++preloadedBanner;
+        .arrow-btn:active {
+            background: #1dff1d;
+            color: #222;
         }
-
-      }, 6000);
-    }
-
-    function comicsArtsScrollToEnd(target) {
-      var carousel = document.getElementById("comicsCoverCarousel");
-      carousel.scrollBy({
-        left: carousel.scrollWidth > 0 ? carousel.scrollWidth : 0,
-        top: carousel.scrollHeight > 0 ? carousel.scrollHeight : 0,
-        behavior: "smooth"
-      })
-    }
-  </script>
+        #gameover-btn {
+            margin-top: 18px;
+            padding: 8px 24px;
+            font-size: 20px;
+            border: none;
+            background: #f44336;
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #gameover-btn:active {
+            background: #c62828;
+        }
+        #open-shop-btn {
+            margin: 30px auto 0 auto;
+            padding: 10px 30px;
+            font-size: 20px;
+            border-radius: 8px;
+            background: #ffd700;
+            color: #222;
+            border: 2px solid #ffd700;
+            cursor: pointer;
+            display: block;
+        }
+        #shop-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #0009;
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        #shop-modal-content {
+            background: #222;
+            padding: 30px 26px 24px 26px;
+            border-radius: 18px;
+            box-shadow: 0 0 40px #000b;
+            max-width: 370px;
+            width: 95vw;
+            text-align: center;
+            position: relative;
+        }
+        #shop-modal h2 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 27px;
+        }
+        #shop-coins {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .shop-btn {
+            margin: 8px 6px 14px 6px;
+            padding: 9px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            background: #222;
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            width: 100%;
+            display: block;
+        }
+        .shop-btn:disabled {
+            background: #333;
+            color: #aaa;
+            border-color: #888;
+            cursor: not-allowed;
+        }
+        #shield-status {
+            font-size: 18px;
+            margin-top: 7px;
+        }
+        #shop-msg {
+            color: #0f0;
+            font-size: 17px;
+            margin-top: 10px;
+            min-height: 24px;
+        }
+        #close-shop-btn {
+            margin-top: 10px;
+            padding: 8px 25px;
+            font-size: 18px;
+            border-radius: 6px;
+            background: #ffd700;
+            color: #222;
+            border: none;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            #game-canvas { width: 95vw; height: 95vw; max-width: 400px; max-height: 400px; }
+            #shop-modal-content { max-width: 98vw;}
+        }
+    </style>
 </head>
-
 <body>
-  <a id="previewUrl" href="#" style="position: absolute; z-index: -1; color: transparent;">Preview Url</a>
-  <div id="main">
-    <div class="main-content">
-      <div id="webglContainer" class="d-flex justify-content-center">
-        <div class="inline-ads-160x600">
-          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-7799788185947239" data-ad-slot="5923825303"></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
+    <h1>snakio.io</h1>
+    <div id="game-container">
+        <canvas id="game-canvas" width="400" height="400"></canvas>
+        <div id="score">Score: 0</div>
+        <button id="gameover-btn">Game Over</button>
+        <div id="controls">
+            <div class="arrows-row">
+                <button class="arrow-btn" id="up-btn">&#8593;</button>
+            </div>
+            <div class="arrows-row">
+                <button class="arrow-btn" id="left-btn">&#8592;</button>
+                <button class="arrow-btn" id="down-btn">&#8595;</button>
+                <button class="arrow-btn" id="right-btn">&#8594;</button>
+            </div>
         </div>
-        <div class="webgl-section">
-          <div id="unity-container">
-            <div id="unity-canvas-container">
-              <canvas id="unity-canvas"></canvas>
-            </div>
-            <div id="unity-loading-bar">
-              <div id="unity-logo"></div>
-              <div id="unity-progress-bar-empty">
-                <div id="unity-progress-bar-full"></div>
-              </div>
-            </div>
-            <!-- snake-io_728x90 -->
-            <ins id="snake-io_728x90" class="adsbygoogle" data-ad-client="ca-pub-7799788185947239" data-ad-slot="5983811381"></ins>
-            <script>
-              (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-          <div id="otherKooApps">
-            <div id="snakeContainer">
-              <a href="comics.php?chapter=1&page=1">
-                <div class="position-relative" style="margin: auto;" id="comicsBanner">
-                  <img id="headWow" class="glow-wow-img" src="assets/design/home/comics_banners/wow.webp" alt="Glow say Wow">
-                  <img id="headGlow" class="glow-wow-img" src="assets/design/home/comics_banners/head_glow.webp" alt="Glow's cute head">
-                  <button id="readTheComicBtn">Read the Comic!</button>
+    </div>
+    <button id="open-shop-btn">Open Shop 🛒</button>
+    <div id="shop-modal">
+        <div id="shop-modal-content">
+            <h2>Shop</h2>
+            <div id="shop-coins">Coins: 0</div>
+            <div id="shop-items"></div>
+            <div id="shield-status">Shield: <span id="shield-indicator" style="color:#f44336;">Inactive</span></div>
+            <div id="shop-msg"></div>
+            <button id="close-shop-btn">Close</button>
+        </div>
+    </div>
+    <!-- Audio for eating food -->
+    <audio id="eat-sound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4ec9.mp3" preload="auto"></audio>
+    <script>
+    // --- SHOP LOGIC ---
+    const shopItems = [
+      {
+        id: "shield",
+        name: "Shield",
+        desc: "Protects you from one spike hit.",
+        icon: "🛡️",
+        price: 15,
+        type: "powerup"
+      },
+      {
+        id: "destroy-1",
+        name: "Destroy 1 Spike",
+        desc: "Removes a random spike from the map.",
+        icon: "💥",
+        price: 8,
+        type: "action"
+      },
+      {
+        id: "destroy-10",
+        name: "Destroy 10 Spikes",
+        desc: "Removes up to 10 random spikes.",
+        icon: "💣",
+        price: 60,
+        type: "action"
+      }
+    ];
 
-                  <img data-banner-index="0" class="slide-up-animation comics-chapter-banner" onload="comicsChapterBannersLoop(event)" src="assets/design/home/comics_banners/comic-banner_1.webp" alt="Comics Banner #1">
-                  <img data-banner-index="1" class="comics-chapter-banner" src="assets/design/home/comics_banners/comic-banner_2.webp?v=1.3.20" alt="Comics Banner #2">
-                </div>
-              </a>
-              <a href="https://link.kooapps.com/snake.io?utm_campaign=snake_website_bnr" target="_blank" class="app-icon-link">
-                <img src="assets/design/home/app_icons/snake_appicon-white-min.webp" alt="Snake.io" class="app-icon" width="80" height="80">
-              </a>
-              <a href="https://www.nintendo.com/us/store/products/snake-io-switch/?srsltid=AfmBOooc1RB7xz0OCsGGiVth7sYwOMMmtXpxW3YMWso9cNnkXcyxChDH" target="_blank">
-                <picture>
-                  <source srcset="assets/design/home/btn_switch_narrow-min.webp" media="(max-width: 620px)" type="image/webp" width="783" height="198">
-                  <source srcset="assets/design/home/btn_switch_narrow-min.png" media="(max-width: 620px)" type="image/png" width="783" height="198">
-                  <img src="assets/design/home/btn_switch-min.webp" alt="Nintendo-Snake.io" class="app-icon-nintendo" width="898" height="198" />
-                </picture>
-              </a>
-            </div>
-            <div id="otherGamesContainer">
-              <a href="https://link.kooapps.com/stackybird?utm_campaign=snake_website_bnr" target="_blank" class="app-icon-link">
-                <img src="assets/design/home/app_icons/stacky_bird.webp" alt="Stacky Bird" class="app-icon" width="80" height="80">
-              </a>
-              <a href="https://link.kooapps.com/pianotiles2?utm_campaign=snake_website_bnr" target="_blank" class="app-icon-link">
-                <img src="assets/design/home/app_icons/piano_tiles2.webp" alt="Piano Tiles 2" class="app-icon" width="80" height="80">
-              </a>
-              <a href="https://link.kooapps.com/pianotiles?utm_campaign=snake_website_bnr" target="_blank" class="app-icon-link">
-                <img src="assets/design/home/app_icons/piano_tiles1.webp" alt="Piano Tiles 1" class="app-icon" width="80" height="80">
-              </a>
-              <a href="https://link.kooapps.com/microtown.io?utm_campaign=snake_website_bnr" target="_blank" class="app-icon-link">
-                <img src="assets/design/home/app_icons/microtown.webp" alt="Micro Town.io" class="app-icon" width="80" height="80">
-              </a>
-              <a href="https://link.kooapps.com/pictoword?utm_campaign=snake_website_bnr" target="_blank" class="app-icon-link">
-                <img src="assets/design/home/app_icons/pictoword.webp" alt="Pictoword" class="app-icon" width="80" height="80">
-              </a>
-              <a href="https://link.kooapps.com/helixstackjump?utm_campaign=snake_website_bnr" target="_blank" class="app-icon-link">
-                <img src="assets/design/home/app_icons/helix_stack.webp" alt="Helix Stack Jump" class="app-icon" width="80" height="80">
-              </a>
-              <a href="http://link.kooapps.com/zendoku?utm_campaign=snake_website_bnr" target="_blank" class="app-icon-link">
-                <img src="assets/design/home/app_icons/zendoku.webp" alt="Zendoku" class="app-icon" width="80" height="80">
-              </a>
-              <a href="https://link.kooapps.com/solitaireclassicera?utm_campaign=snake_website_bnr" target="_blank" class="app-icon-link">
-                <img src="assets/design/home/app_icons/solitaire.webp" alt="Solitaire" class="app-icon" width="80" height="80">
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="inline-ads-160x600">
-          <!-- snake.io-display-160x600-02 -->
-          <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-7799788185947239" data-ad-slot="5568725796"></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-        </div>
-      </div>
-    </div>
-    
-<nav class="navbar navbar-expand-lg" style="background-color: transparent;">
-    <div class="container-fluid">
-        <button class="navbar-toggler" id="navbarToggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbarContent" aria-controls="mainNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            &nbsp;
-        </button>
-        <a class="navbar-brand" href="/">
-            <img src="app_icon_snakeio.png" alt="Snake.io logo" width="45" height="45" class="d-inline-block" loading="lazy">&nbsp;
-            <span id="navbrandText">SNAKE.IO</span>
-        </a>
-        <div class="collapse navbar-collapse" id="mainNavbarContent">
-            <ul class="navbar-nav d-flex justify-content-between">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/">Play</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="story.php">Story</a>
-                </li>
-                <li class="nav-item">
-                    <a href="comics.php?chapter=1&page=1" class="nav-link ">Comics</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="characters.php">Characters</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="tutorials.php">Tutorials</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://snake.io/blog/" target="_blank">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://kooapps.com/#games" target="_blank">kooapps.com</a>
-                </li>
-            </ul>
-            <div id="storeLinks">
-                <a href="https://link.kooapps.com/snake.io?utm_campaign=snake_website_ios" onclick="onclickStoreBtn(event)">
-                    <img loading="lazy" src="assets/design/header/apple_badge.webp" class="store-badge" width="348" height="104" data-source-page="index.php" data-store="apple-app-store" data-utm-campaign="snake_website_ios" data-url="https://link.kooapps.com/snake.io?utm_campaign=snake_website_ios" alt="Apple App Store button" id="appleStoreBtn">
-                </a>
-                <a href="https://link.kooapps.com/snake.io?utm_campaign=snake_website_gp" onclick="onclickStoreBtn(event)">
-                    <img loading="lazy" src="assets/design/header/google_play_badge.webp" class="store-badge" width="348" height="104" data-source-page="index.php" data-store="google-play-store" data-utm-campaign="snake_website_gp" data-url="https://link.kooapps.com/snake.io?utm_campaign=snake_website_gp" alt="Google Play Store button" id="googlePlayStoreBtn">
-                </a>
-            </div>
-        </div>
-    </div>
-</nav>    <div class="main-content">
-      <div id="mobileContent">
-        <div class="d-flex justify-content-center">
-          <div id="mobileDownload">
-            <img src="assets/design/home/app_icon_snakeio.webp" width="267" height="266" data-url="https://link.kooapps.com/snake.io" onclick="onClickPlayBtn(event)" id="mobileSnakeLogo" alt="Snake.io Logo">
-            <span data-url="https://link.kooapps.com/snake.io" onclick="onClickPlayBtn(event)">DOWNLOAD</span>
-          </div>
-          <div id="mobilePlay" data-url="https://link.kooapps.com/snake.io" onclick="onClickPlayBtn(event)">
-            <span data-url="https://link.kooapps.com/snake.io" onclick="onClickPlayBtn(event)">PLAY</span>
-          </div>
-        </div>
-        <br>
-        <div id="mobileTrailer" class="ratio ratio-16x9">
-          <div class="youtube-player" data-id="BjnyI5sBCo4" id="BjnyI5sBCo4" onclick="labnolIframe(this)">
-            <img alt="Snake.io trailer thumbnail" id="mobileTrailerThumbnail" src="assets/design/home/hqdefault.webp" width="480" height="360">
-            <div class="play"></div>
-          </div>
-        </div>
-        <br>
-        <div id="mobileStoreLinks">
-          <a href="https://link.kooapps.com/snake.io?utm_campaign=snake_website_ios" onclick="onclickStoreBtn(event)">
-            <img loading="lazy" class="store-badge" src="assets/design/header/apple_badge.webp" width="348" height="104" data-source-page="index.php" data-store="apple-app-store" data-url="https://link.kooapps.com/snake.io?utm_campaign=snake_website_ios" alt="Apple Play Store" id="appleStoreBtn">
-          </a>
-          <a href="https://link.kooapps.com/snake.io?utm_campaign=snake_website_gp" onclick="onclickStoreBtn(event)">
-            <img loading="lazy" class="store-badge" src="assets/design/header/google_play_badge.webp" width="348" height="104" data-source-page="index.php" data-store="google-play-store" data-url="https://link.kooapps.com/snake.io?utm_campaign=snake_website_gp" alt="Google Play Store" id="googlePlayStoreBtn">
-          </a>
-        </div>
-        <div class="mt-3">
-          <h2 id="mobileFollow">FOLLOW</h2>
-          <div id="mobileSocial">
-            <div class="mobile-social-link">
-              <a href="https://www.facebook.com/snakeiogame" target="_blank">
-                <img src="assets/design/footer/icon_fb.png" alt="Facebook Page Link" width="45" height="45">
-              </a>
-            </div>
-            <div class="mobile-social-link">
-              <a href="https://twitter.com/snakeiogame" target="_blank">
-                <img src="assets/design/footer/icon_tw.png" alt="Twitter Page Link" width="45" height="45">
-              </a>
-            </div>
-            <div class="mobile-social-link">
-              <a href="https://www.youtube.com/@kooapps" target="_blank">
-                <img src="assets/design/footer/icon_yt.png" alt="Youtube Page Link" width="45" height="45">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="comicsCoverArts" class="d-flex flex-row justify-content-between align-items-center">
-        <div class="inline-ads-300x600 cca-ads">
-          <!-- snake.io-display-300x600-01 -->
-          <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-7799788185947239" data-ad-slot="9148028092"></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-        </div>
-        <div class="mx-auto d-flex flex-column">
-          <div id="comicsCoverBanner">
-            <span class="h1 fw-bolder fst-italic">Snake.io: The Comic</span>
-          </div>
-          <div id="comicsCoverCarousel">
-            <input onclick="comicsCarouselScrollByBtn(event)" data-increment="-400" data-target="comicsCoverCarousel" data-axis="x" class="comics-carousel-btn previous" type="image" src="assets/design/cc-arrow.png">
-
-                                                    <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=0&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-0/0_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter 0">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=1&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-1/1_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter 1">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=2&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-2/2_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter 2">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=3&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-3/3_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter 3">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=4&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-4/4_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter 4">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=5&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-5/5_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter 5">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=6&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-6/6_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter 6">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=7&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-7/7_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter 7">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=b1&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-b1/b1_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter b1">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=b2&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-b2/b2_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter b2">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=b3&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-b3/b3_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter b3">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=b4&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-b4/b4_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter b4">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=b5&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-b5/b5_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter b5">
-                  </a>
-                              </div>
-                                        <div class="comics-cover-art-container">
-                                  <a href="comics.php?chapter=b6&page=1">
-                    <div class="chapter-readNow-banner">
-                      <h3>Read Now</h3>
-                    </div>
-                    <img src="assets/design/comics/chapter-b6/b6_0.webp?v=1.3.20" class="comics-chapter-cover-art rounded" width="280" height="auto" alt="Chapter b6">
-                  </a>
-                              </div>
-            
-            <input onclick="comicsCarouselScrollByBtn(event)" data-increment="400" data-target="comicsCoverCarousel" data-axis="x" class="comics-carousel-btn next" type="image" src="assets/design/cc-arrow.png">
-          </div>
-        </div>
-        <div class="inline-ads-300x600 cca-ads">
-          <!-- snake.io-display-300x600-02 -->
-          <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-7799788185947239" data-ad-slot="5735632045"></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-        </div>
-      </div>
-      <div id="aboutGame">
-        <img loading="lazy" src="assets/design/home/corgi_cropped.png" class="floating-img" id="corgi" width="236" height="413" alt="Corgi snake">
-        <div class="content">
-          <h1>
-            <strong>Snake.io: Fun Snake.io Games</strong>
-          </h1>
-          <span class="fst-italic fw-light d-block">Kooapps Games</span>
-          <p>
-            Snake.io is a multiplayer game where you must slither and survive as long as possible.
-            Challenge your friends and try to be the most giant worm in the arena.
-            Think you can reach the top of the leaderboard?
-          </p>
-          <p>
-            Snake.io combines trendy art with the oldest classic snake game mechanics.
-            Start as a small worm and try to get bigger by eating. Worm your way through fields of food and try to beat other players' scores.
-            How long can you survive in this snake eat snake world?
-          </p>
-        </div>
-        <img loading="lazy" src="assets/design/home/unicorn_cropped.png" class="floating-img" id="unicorn" width="254" height="437" alt="Unicorn snake">
-      </div>
-      <div id="gameInfo">
-        <div class="content">
-          <div class="d-flex justify-content-between">
-            <div class="w-75">
-              <div>
-                <h2>Release Date</h2>
-                <ul>
-                  <li>April 2016 (iOS and Android)</li>
-                  <li>May 20, 2020 (Amazon)</li>
-                  <li>July 1st, 2021 (WebGL)</li>
-                  <li>May 5, 2023 (Apple Arcade)</li>
-                </ul>
-              </div>
-              <div>
-                <h2>Developer</h2>
-                <p>
-                  <a href="/">Snake.io</a>&nbsp;is developed by Kooapps. Play more of our games on&nbsp;
-                  <a href="https://play.google.com/store/apps/dev?id=8438468457954317322" target="_blank">Google Play Store</a>,&nbsp;
-                  <a href="https://apps.apple.com/ph/developer/kooapps/id290924809" target="_blank">Apple App Store</a>,&nbsp;and&nbsp;
-                  <a href="https://www.amazon.com/s?i=mobile-apps&rh=p_4%3AKooapps&search-type=ss" target="_blank">Amazon App Store</a>
-                </p>
-              </div>
-              <div>
-                <h2>Platform</h2>
-                <ul>
-                  <li>Web browser</li>
-                  <li>Android</li>
-                  <li>iOS</li>
-                  <li>Apple TV</li>
-                  <li>Fire Phone/Tablet</li>
-                </ul>
-              </div>
-              <div>
-                <h2>Controls</h2>
-                <ul>
-                  <li>Change Direction: Mouse or WASD Keys or Arrow Keys</li>
-                  <li>Speed Boost: Hold Left Mouse Click or Spacebar</li>
-                </ul>
-              </div>
-              <div>
-                <h2>Advantages of Playing Snake.io</h2>
-                <ul>
-                  <li>Read more about how playing Snake.io can help you</li>
-                </ul>
-                <a class="read-more-btn mb-3" href="advantages.php">
-                  Read More
-                </a>
-              </div>
-              <div>
-                <div class="d-inline-block">
-                  <h2>Fandom</h2>
-                </div>
-                <img id="fandomIcon" src="assets/design/home/fandom_icon.png" alt="Fandom Icon" width="147" height="104">
-                <ul>
-                  <li>Read more about Snake.io on <a id="fandomPageLink" href="https://snakeio.fandom.com/wiki/SnakeIO_Wiki" target="_blank">Fandom</a></li>
-                </ul>
-                <a class="read-more-btn d-block" href="https://snakeio.fandom.com/wiki/SnakeIO_Wiki" target="_blank">
-                  Read Fandom Page
-                </a>
-              </div>
-            </div>
-            <div class="inline-ads-300x600 position-absolute" style="top:0;right:-3rem;">
-              <!-- snake.io-display-300x600-03 -->
-              <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-7799788185947239" data-ad-slot="8975204750"></ins>
-              <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-              </script>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-<div class="main-footer">
-    <div id="top">
-        <img loading="lazy" src="assets/design/footer/penguin_cropped.png" style="z-index: 1000;" id="penguin" width="370" height="285" alt="Penguin">
-                    <div class="w-100">
-                                    <a class="play-more-btn" id="playNowBtn" href="/" style="text-decoration:none;color:#fff;">
-                        <span class="d-block">PLAY NOW</span>
-                    </a>
-                            </div>
-            </div>
-    <footer id="bottom" class="d-flex justify-content-center">
-        <div id="links">
-            <div id="socialLinks">
-                <div class="social-page-link">
-                    <a href="https://www.facebook.com/snakeiogame" target="_blank">
-                        <img src="assets/design/footer/icon_fb.png" alt="Facebook Page Link" width="45" height="45" loading="lazy">
-                    </a>
-                </div>
-                <div class="social-page-link">
-                    <a href="https://twitter.com/snakeiogame" target="_blank">
-                        <img src="assets/design/footer/icon_tw.png" alt="Twitter Page Link" width="45" height="45" loading="lazy">
-                    </a>
-                </div>
-                <div class="social-page-link">
-                    <a href="https://www.youtube.com/@kooapps" target="_blank">
-                        <img src="assets/design/footer/icon_yt.png" alt="Youtube Page Link" width="45" height="45" loading="lazy">
-                    </a>
-                </div>
-            </div>
-            <div class="external-link">
-                <a href="https://kooapps.com/terms.php" target="_blank">Terms of Use</a>
-            </div>
-            <div class="external-link">
-                <a href="https://kooapps.com/privacypolicy.php" target="_blank">Privacy Policy</a>
-            </div>
-            <div class="external-link">
-                <a href="https://kooapps.com/privacypolicy.php#cookies" target="_blank">Cookies</a>
-            </div>
-        </div>
-    </footer>
-</div>  </div>
-  <script>
-    function getSiteVersion() {
-      return "1.3.20";
+    // Persistent coins
+    function getCoins() {
+        return parseInt(localStorage.getItem('snake_coins') || "0");
+    }
+    function setCoins(val) {
+        localStorage.setItem('snake_coins', val);
+        updateShopCoinsUI();
+    }
+    function addCoins(val) {
+        setCoins(getCoins() + val);
     }
 
-    var unityInstance = null;
+    const openShopBtn = document.getElementById("open-shop-btn");
+    const shopModal = document.getElementById("shop-modal");
+    const shopModalContent = document.getElementById("shop-modal-content");
+    const closeShopBtn = document.getElementById("close-shop-btn");
+    const shopItemsDiv = document.getElementById("shop-items");
+    const shopCoinsDiv = document.getElementById("shop-coins");
+    const shopMsg = document.getElementById("shop-msg");
+    const shieldStatus = document.getElementById('shield-indicator');
 
-    var buildUrl = "Build";
-    var config = {
-      dataUrl: buildUrl + "/e46ab224c8959b3255c986c5825f4d2b.data.br",
-      frameworkUrl: buildUrl + "/6592eeda03c753d2ba9aa31fc01b656b.js.br",
-      codeUrl: buildUrl + "/13e209b1b09bfa0a1bd0778c91e15a85.wasm.br",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "Amelos Interactive",
-      productName: "Snake.io",
-      productVersion: "3.0.3",
-    };
-    var loaderUrl = buildUrl + "/3.0.3.loader.js";
+    let shieldActive = false;
 
-    var webglContainer = document.getElementById("webglContainer")
-    var style = window.getComputedStyle(webglContainer);
+    openShopBtn.onclick = () => {
+        renderShop();
+        shopModal.style.display = "flex";
+    }
+    closeShopBtn.onclick = () => {
+        shopModal.style.display = "none";
+        shopMsg.textContent = "";
+    }
+    shopModal.onclick = function(e) {
+        if (e.target === shopModal) {
+            shopModal.style.display = "none";
+            shopMsg.textContent = "";
+        }
+    }
+    function updateShopCoinsUI() {
+        shopCoinsDiv.textContent = "Coins: " + getCoins();
+    }
+    function renderShop() {
+        updateShopCoinsUI();
+        shopItemsDiv.innerHTML = "";
+        shopItems.forEach(item => {
+            // Determine if item is available
+            let disabled = false;
+            let owned = false;
+            let status = "";
+            if (item.id === "shield" && shieldActive) {
+                disabled = true;
+                owned = true;
+                status = "Equipped";
+            }
+            if (getCoins() < item.price) {
+                disabled = true;
+                status = status || "Not enough coins";
+            }
+            // Build item UI
+            const btn = document.createElement("button");
+            btn.className = "shop-btn";
+            btn.disabled = disabled;
+            btn.innerHTML = `<span style="font-size:26px;vertical-align:middle;">${item.icon}</span> 
+                <b>${item.name}</b> - ${item.price} <span style="color:#ffd700;">🪙</span><br>
+                <span style="font-size:15px;color:#ffe066">${item.desc}</span>
+                <br><span style="font-size:14px;color:${owned?'#0ff':'#f66'}">${status}</span>`;
+            btn.onclick = () => buyShopItem(item.id);
+            shopItemsDiv.appendChild(btn);
+        });
+        setShieldUI(shieldActive);
+    }
+    function showShopMsg(msg, color="#0f0") {
+        shopMsg.textContent = msg;
+        shopMsg.style.color = color;
+        setTimeout(() => {shopMsg.textContent = "";}, 1600);
+    }
+    function setShieldUI(active) {
+        shieldStatus.textContent = active ? "Active" : "Inactive";
+        shieldStatus.style.color = active ? "#00e7ff" : "#f44336";
+    }
+    function updateShopButtons() {
+        // No-op for modal version; handled on modal open/render
+    }
+    function buyShopItem(itemId) {
+        const coins = getCoins();
+        const item = shopItems.find(i=>i.id===itemId);
+        if (!item) return;
+        if (coins < item.price) {
+            showShopMsg("Not enough coins!", "#f66");
+            return;
+        }
+        if (itemId === "shield") {
+            if (shieldActive) {
+                showShopMsg("Shield already active!", "#0ff");
+                return;
+            }
+            shieldActive = true;
+            setCoins(coins - item.price);
+            setShieldUI(true);
+            showShopMsg("Shield equipped!");
+        } else if (itemId === "destroy-1") {
+            if (spikes.length === 0) {
+                showShopMsg("No spikes to destroy", "#f66");
+                return;
+            }
+            let idx = Math.floor(Math.random() * spikes.length);
+            spikes.splice(idx, 1);
+            setCoins(coins - item.price);
+            showShopMsg("Destroyed 1 spike!");
+        } else if (itemId === "destroy-10") {
+            if (spikes.length === 0) {
+                showShopMsg("No spikes to destroy", "#f66");
+                return;
+            }
+            let removeCount = Math.min(10, spikes.length);
+            for (let i = 0; i < removeCount; i++) {
+                let idx = Math.floor(Math.random() * spikes.length);
+                spikes.splice(idx, 1);
+            }
+            setCoins(coins - item.price);
+            showShopMsg("Destroyed 10 spikes!");
+        }
+        renderShop();
+        draw();
+    }
 
-    var script = document.createElement("script");
-    script.async = true;
-    script.src = loaderUrl;
+    // --- SNAKE GAME LOGIC ---
 
-    function loadUnityContent(callback = null) {
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      loadingBar.style.display = "block";
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    const scoreDiv = document.getElementById('score');
+    const gameoverBtn = document.getElementById('gameover-btn');
+    const upBtn = document.getElementById('up-btn');
+    const downBtn = document.getElementById('down-btn');
+    const leftBtn = document.getElementById('left-btn');
+    const rightBtn = document.getElementById('right-btn');
+    const eatSound = document.getElementById('eat-sound');
 
-      createUnityInstance(canvas, config, (progress) => {
-        progressBarFull.style.width = 100 * progress + "%";
-      }).then((gameInstance) => {
-        var unityWebHelperScript = document.createElement("script");
-        unityWebHelperScript.src = "assets/js/unityWebHelper.js?v=1.0.2";
-        unityWebHelperScript.onload = () => {
-          window.addEventListener("resize", onScreenResize);
+    const gridSize = 20;
+    const canvasSize = 400;
+    let snake, direction, food, score, gameOver, gameInterval;
+    let heldDirection = null;
+    let directionLocked = false;
+    let spikes = [];
+    const SPIKE_COUNT = 10;
+
+    function randomGridPosition() {
+        return {
+            x: Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize,
+            y: Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize
         };
-        document.body.appendChild(unityWebHelperScript);
-
-        loadingBar.style.display = "none";
-        unityInstance = gameInstance;
-      }).catch(error => {
-        alert(error);
-      });
     }
 
-    script.onload = loadUnityContent
-
-    document.body.appendChild(script);
-
-    function OnUnityReady() {
-      if (unityInstance == null) {
-        return;
-      }
-      unityInstance.SendMessage("LocalizationManager", "SetBrowserLanguage", "en");
-    };
-
-    var content = document.getElementById('unity-canvas-container');
-
-    function onMouse() {
-      content.style['pointer-events'] = 'auto';
+    function placeFood() {
+        let valid = false;
+        let newFood;
+        while (!valid) {
+            newFood = randomGridPosition();
+            valid = (
+                !snake.some(seg => seg.x === newFood.x && seg.y === newFood.y) &&
+                !spikes.some(sp => sp.x === newFood.x && sp.y === newFood.y)
+            );
+        }
+        food = newFood;
     }
 
-    function onScroll() {
-      content.style['pointer-events'] = 'none';
+    function placeSpikes() {
+        spikes = [];
+        while (spikes.length < SPIKE_COUNT) {
+            let pos = randomGridPosition();
+            if (
+                !snake.some(seg => seg.x === pos.x && seg.y === pos.y) &&
+                (!food || (food.x !== pos.x || food.y !== pos.y)) &&
+                !spikes.some(sp => sp.x === pos.x && sp.y === pos.y)
+            ) {
+                spikes.push(pos);
+            }
+        }
     }
 
-    document.addEventListener('wheel', onScroll, false);
-    document.addEventListener('mousemove', onMouse, false);
-
-    function onClickPlayBtn(event) {
-      window.location.href = event.target.dataset.url;
+    function initGame() {
+        snake = [
+            {x: 5 * gridSize, y: 5 * gridSize},
+            {x: 4 * gridSize, y: 5 * gridSize},
+            {x: 3 * gridSize, y: 5 * gridSize}
+        ];
+        direction = {x: 0, y: 0}; // Not moving at start
+        score = 0;
+        gameOver = false;
+        shieldActive = false;
+        scoreDiv.textContent = "Score: 0";
+        setShieldUI(false);
+        placeSpikes();
+        placeFood();
+        if (gameInterval) clearInterval(gameInterval);
+        gameInterval = setInterval(gameLoop, 100);
+        draw();
     }
-  </script>
-  <script type="text/javascript">
-    Modernizr.on('webp', function(result) {
-      // webp is supported
-      if (result) {
-        window.webpSupported = true;
-        return;
-      }
 
-      window.webpSupported = false;
+    function drawSpike(spike) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(spike.x + gridSize/2, spike.y + 3);
+        ctx.lineTo(spike.x + 3, spike.y + gridSize-3);
+        ctx.lineTo(spike.x + gridSize-3, spike.y + gridSize-3);
+        ctx.closePath();
+        ctx.fillStyle = "#c62828";
+        ctx.fill();
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+    }
 
-      var mobileSnakeLogo = document.getElementById("mobileSnakeLogo");
-      mobileSnakeLogo.src = mobileSnakeLogo.src.replace(".webp", ".png");
+    function draw() {
+        ctx.clearRect(0, 0, canvasSize, canvasSize);
 
-      var mobileTrailerThumb = document.getElementById("mobileTrailerThumbnail");
-      mobileTrailerThumb.src = mobileTrailerThumb.src.replace(".webp", ".jpg");
+        for (const spike of spikes) {
+            drawSpike(spike);
+        }
 
-      var appIcons = document.getElementsByClassName("app-icon");
-      var appIconNintendo = document.getElementsByClassName("app-icon-nintendo");
-      var coverArts = document.getElementsByClassName("comics-chapter-cover-art");
-      var comicsBanners = document.getElementsByClassName("comics-chapter-banner");
+        ctx.fillStyle = "#00FF00";
+        snake.forEach((segment, idx) => {
+            ctx.fillRect(segment.x, segment.y, gridSize, gridSize);
+            if (idx === 0) {
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(segment.x + 4, segment.y + 4, 4, 4);
+                ctx.fillRect(segment.x + 12, segment.y + 4, 4, 4);
+                ctx.fillStyle = "#00FF00";
+            }
+        });
 
-      var webpImages = new Array();
-      webpImages = webpImages
-        .concat(Array.from(appIcons)).concat(Array.from(appIconNintendo))
-        .concat(Array.from(coverArts)).concat(Array.from(comicsBanners));
+        ctx.fillStyle = "#FFD700";
+        ctx.fillRect(food.x, food.y, gridSize, gridSize);
 
-      for (var i = 0; i < webpImages.length; i++) {
-        var webpImg = webpImages[i];
-        webpImg.src = webpImg.src.replace(".webp", ".png");
-      }
+        if (shieldActive) {
+            ctx.save();
+            ctx.strokeStyle = "#00e7ff";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(snake[0].x + gridSize / 2, snake[0].y + gridSize / 2, gridSize / 2 + 2, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        if (gameOver) {
+            ctx.fillStyle = "#fff";
+            ctx.font = "36px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("Game Over!", canvasSize / 2, canvasSize / 2);
+        }
+    }
+
+    function moveSnake() {
+        if (!direction || (direction.x === 0 && direction.y === 0)) {
+            return;
+        }
+
+        let newHead = {
+            x: snake[0].x + direction.x,
+            y: snake[0].y + direction.y
+        };
+
+        if (newHead.x < 0) newHead.x = canvasSize - gridSize;
+        if (newHead.x >= canvasSize) newHead.x = 0;
+        if (newHead.y < 0) newHead.y = canvasSize - gridSize;
+        if (newHead.y >= canvasSize) newHead.y = 0;
+
+        let hitSpikeIdx = spikes.findIndex(sp => sp.x === newHead.x && sp.y === newHead.y);
+        if (hitSpikeIdx !== -1) {
+            if (shieldActive) {
+                spikes.splice(hitSpikeIdx, 1);
+                shieldActive = false;
+                setShieldUI(false);
+                showShopMsg('Your shield saved you!');
+            } else {
+                endGame();
+                return;
+            }
+        }
+
+        snake.unshift(newHead);
+
+        if (newHead.x === food.x && newHead.y === food.y) {
+            score++;
+            scoreDiv.textContent = "Score: " + score;
+            eatSound.currentTime = 0;
+            eatSound.play();
+            addCoins(2); // 2 coins per food
+            placeFood();
+        } else {
+            snake.pop();
+        }
+    }
+
+    function gameLoop() {
+        if (gameOver) {
+            draw();
+            return;
+        }
+        moveSnake();
+        draw();
+    }
+
+    function endGame() {
+        gameOver = true;
+        clearInterval(gameInterval);
+        releaseHeldDirection();
+        draw();
+    }
+
+    function setHeldDirection(newDir) {
+        if (gameOver) return;
+        if (directionLocked) return;
+        heldDirection = newDir;
+        direction = newDir;
+        directionLocked = true;
+    }
+    function releaseHeldDirection() {
+        heldDirection = null;
+        direction = {x: 0, y: 0};
+        directionLocked = false;
+    }
+
+    upBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: 0, y: -gridSize}); });
+    upBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
+    downBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: 0, y: gridSize}); });
+    downBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
+    leftBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: -gridSize, y: 0}); });
+    leftBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
+    rightBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: gridSize, y: 0}); });
+    rightBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
+
+    upBtn.addEventListener('mousedown', e => { setHeldDirection({x: 0, y: -gridSize}); });
+    upBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
+    upBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
+    downBtn.addEventListener('mousedown', e => { setHeldDirection({x: 0, y: gridSize}); });
+    downBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
+    downBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
+    leftBtn.addEventListener('mousedown', e => { setHeldDirection({x: -gridSize, y: 0}); });
+    leftBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
+    leftBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
+    rightBtn.addEventListener('mousedown', e => { setHeldDirection({x: gridSize, y: 0}); });
+    rightBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
+    rightBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
+
+    window.addEventListener('keydown', e => {
+        if (gameOver) return;
+        let key = e.key.toLowerCase();
+        let newDir = null;
+        if ((key === "arrowup" || key === "w")) newDir = {x: 0, y: -gridSize};
+        else if ((key === "arrowdown" || key === "s")) newDir = {x: 0, y: gridSize};
+        else if ((key === "arrowleft" || key === "a")) newDir = {x: -gridSize, y: 0};
+        else if ((key === "arrowright" || key === "d")) newDir = {x: gridSize, y: 0};
+        if (newDir) setHeldDirection(newDir);
+    });
+    window.addEventListener('keyup', e => {
+        let key = e.key.toLowerCase();
+        if (
+            key === "arrowup" || key === "w" ||
+            key === "arrowdown" || key === "s" ||
+            key === "arrowleft" || key === "a" ||
+            key === "arrowright" || key === "d"
+        ) {
+            releaseHeldDirection();
+        }
     });
 
-    function comicsCarouselScrollByBtn(event) {
-      var target = event.target.dataset.target;
-      var axis = event.target.dataset.axis;
-      var increment = event.target.dataset.increment;
+    gameoverBtn.addEventListener('click', () => {
+        if (!gameOver) {
+            endGame();
+        }
+    });
 
-      var carouselElement = document.getElementById(target);
-      if (axis === "x") {
-        carouselElement.scrollBy({
-          left: parseInt(increment),
-          behavior: "smooth"
-        });
-      } else if (axis === "y") {
-        carouselElement.scrollBy({
-          top: parseInt(increment),
-          behavior: "smooth"
-        });
-      }
-    }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" type="text/javascript" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script>
-    if (typeof($.fn.popover) === undefined) {
-        document.write('<script src="assets/bootstrap/5.3.3/bootstrap.bundle.min.js"><\/script>');
-    }
-</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"94f5d2d0be223a6b","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.6.2","token":"2ccb4ef1d72d45199393ae7152e68558"}' crossorigin="anonymous"></script>
+    // Start game
+    initGame();
+    </script>
 </body>
-
 </html>
+
+<div id="level" style="font-size:20px;margin-top:8px;color:#ffd700;">Level: 1</div>
