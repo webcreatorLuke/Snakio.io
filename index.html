@@ -1,599 +1,795 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>snakio.io - Snake Game</title>
-    <style>
-        body {
-            background: #222;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 40px;
-        }
-        #game-container {
-            display: inline-block;
-            background: #111;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 30px #000a;
-        }
-        #game-canvas {
-            background: #222;
-            border: 2px solid #0f0;
-            display: block;
-            margin: auto;
-            touch-action: none;
-        }
-        #score {
-            margin-top: 10px;
-            font-size: 22px;
-        }
-        #controls {
-            margin-top: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .arrows-row {
-            display: flex;
-            flex-direction: row;
-            gap: 8px;
-        }
-        .arrow-btn {
-            width: 48px;
-            height: 48px;
-            font-size: 28px;
-            background: #222;
-            color: #0f0;
-            border: 2px solid #0f0;
-            border-radius: 10px;
-            cursor: pointer;
-            user-select: none;
-            outline: none;
-            transition: background 0.2s;
-        }
-        .arrow-btn:active {
-            background: #1dff1d;
-            color: #222;
-        }
-        #gameover-btn {
-            margin-top: 18px;
-            padding: 8px 24px;
-            font-size: 20px;
-            border: none;
-            background: #f44336;
-            color: #fff;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        #gameover-btn:active {
-            background: #c62828;
-        }
-        #open-shop-btn {
-            margin: 30px auto 0 auto;
-            padding: 10px 30px;
-            font-size: 20px;
-            border-radius: 8px;
-            background: #ffd700;
-            color: #222;
-            border: 2px solid #ffd700;
-            cursor: pointer;
-            display: block;
-        }
-        #shop-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: #0009;
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        #shop-modal-content {
-            background: #222;
-            padding: 30px 26px 24px 26px;
-            border-radius: 18px;
-            box-shadow: 0 0 40px #000b;
-            max-width: 370px;
-            width: 95vw;
-            text-align: center;
-            position: relative;
-        }
-        #shop-modal h2 {
-            color: #ffd700;
-            margin-bottom: 10px;
-            font-size: 27px;
-        }
-        #shop-coins {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        .shop-btn {
-            margin: 8px 6px 14px 6px;
-            padding: 9px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
-            background: #222;
-            color: #ffd700;
-            border: 2px solid #ffd700;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-            width: 100%;
-            display: block;
-        }
-        .shop-btn:disabled {
-            background: #333;
-            color: #aaa;
-            border-color: #888;
-            cursor: not-allowed;
-        }
-        #shield-status {
-            font-size: 18px;
-            margin-top: 7px;
-        }
-        #shop-msg {
-            color: #0f0;
-            font-size: 17px;
-            margin-top: 10px;
-            min-height: 24px;
-        }
-        #close-shop-btn {
-            margin-top: 10px;
-            padding: 8px 25px;
-            font-size: 18px;
-            border-radius: 6px;
-            background: #ffd700;
-            color: #222;
-            border: none;
-            cursor: pointer;
-        }
-        @media (max-width: 600px) {
-            #game-canvas { width: 95vw; height: 95vw; max-width: 400px; max-height: 400px; }
-            #shop-modal-content { max-width: 98vw;}
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>snakio</title>
+  <style>
+    body { margin: 0; background: #111; overflow: hidden; }
+    #ui-bar {
+      position: absolute; top: 10px; left: 0; right: 0;
+      display: flex; justify-content: center; gap: 30px;
+      z-index: 2; font-size: 20px; color: #ffd700;
+      background: rgba(20,17,34,0.33); padding: 7px 0 4px 0;
+      border-radius: 0 0 16px 16px;
+      pointer-events: none;
+      user-select: none;
+      font-family: Arial,sans-serif;
+    }
+    #levelup-msg, #achievement-popup {
+      position: absolute; left: 50%; top: 22%; font-size: 38px;
+      transform: translate(-50%, -50%);
+      color: #77f7ff; text-shadow: 0 0 32px #00f7, 0 0 5px #fff;
+      opacity: 0; pointer-events: none; z-index: 11;
+      transition: opacity 0.7s;
+      font-family: 'Arial Black',Arial,sans-serif;
+      background: none;
+    }
+    #achievement-popup {
+      font-size: 28px;
+      top: 32%;
+      color: #ffe066;
+      text-shadow: 0 0 16px #f80, 0 0 2px #fff;
+      background: #222d;
+      padding: 18px 38px;
+      border-radius: 16px;
+      transition: opacity 0.7s;
+    }
+    #restart-btn {
+      position: absolute; left: 50%; top: 46%; font-size: 28px;
+      transform: translate(-50%, -50%);
+      color: #fff; background: #2323cc; border: none;
+      border-radius: 12px; padding: 14px 38px;
+      cursor: pointer; z-index: 5; display: none;
+      box-shadow: 0 6px 24px #000b;
+    }
+    #howto {
+      position: absolute; right: 12px; bottom: 12px; z-index: 9;
+      color: #fff; background: #000b; padding: 8px 18px; border-radius: 18px; font-size: 16px;
+      font-family: Arial,sans-serif;
+      opacity: .76;
+    }
+    #shop-btn, #achievements-btn {
+      position: absolute; top: 60px; left: 16px; z-index: 10;
+      background: #ffd700; color: #222; border: none; border-radius: 10px;
+      padding: 10px 24px; font-size: 20px; box-shadow: 0 4px 18px #000a; cursor: pointer;
+      font-family: Arial,sans-serif; margin-right: 8px;
+    }
+    #achievements-btn { left: 136px; }
+    #shop-modal, #achievements-modal, #start-modal, #quit-modal {
+      display: none; position: fixed; z-index: 1001;
+      top: 0; left: 0; width: 100vw; height: 100vh; background: #000a;
+      align-items: center; justify-content: center;
+    }
+    #shop-modal-inner, #achievements-modal-inner, #start-modal-inner, #quit-modal-inner {
+      background: #232234; color: #ffd700;
+      border-radius: 18px; max-width: 370px; min-width: 280px;
+      margin: auto; padding: 28px 30px 18px 30px; text-align: center;
+      box-shadow: 0 0 40px #000b;
+      position: relative;
+    }
+    #shop-modal h2, #achievements-modal h2, #start-modal h1 { margin-top: 0; color: #ffd700; }
+    .shop-item, .skin-item, .achievement-item {
+      margin: 18px 0 14px 0; background: #19192a;
+      border-radius: 8px; padding: 13px 8px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 18px;
+    }
+    .shop-item-info, .skin-item-info, .achievement-info { text-align: left; }
+    .shop-item-name, .skin-item-name, .achievement-name { font-weight: bold; color: #fff; }
+    .shop-item-desc, .skin-item-desc, .achievement-desc { font-size: 14px; color: #ffe066; }
+    .shop-item-price, .skin-item-price { color: #ffd700; font-size: 17px; }
+    .shop-buy-btn, .skin-buy-btn, .skin-equip-btn, .achievement-btn {
+      background: #ffd700; color: #232234;
+      border: none; border-radius: 7px; font-size: 18px;
+      padding: 7px 14px; cursor: pointer; margin-left: 10px;
+      transition: background 0.2s;
+    }
+    .shop-buy-btn:disabled, .skin-buy-btn:disabled, .skin-equip-btn:disabled, .achievement-btn:disabled {
+      background: #aaa; color: #444; cursor: not-allowed;
+    }
+    #shop-close-btn, #achievements-close-btn, #start-play-btn, #start-quit-btn, #quit-close-btn {
+      background: #ffd700; color: #232234; border: none;
+      border-radius: 8px; font-size: 19px; padding: 7px 28px;
+      margin-top: 16px; cursor: pointer;
+    }
+    #shop-msg { min-height: 26px; font-size: 16px; margin: 10px 0 0 0; color: #0ff; text-align: center; }
+    #shield-status-shop { font-size: 15px; margin-top: 10px; color: #ffd700; }
+    .skin-sample {
+      display: inline-block;
+      width: 34px; height: 20px; border-radius: 6px; border: 2px solid #fff;
+      margin-right: 9px; vertical-align: middle;
+    }
+    .skin-current { border: 2px solid #0ff !important; box-shadow: 0 0 9px #0ff; }
+    .achievement-badge {
+      width: 38px; height: 38px; border-radius: 50%; display: inline-block;
+      font-size: 30px; line-height: 38px; text-align: center; margin-right: 11px;
+      background: #0ff3; border: 2px solid #ffe066; color: #ffe066;
+      box-shadow: 0 0 8px #ffe06644;
+      transition: box-shadow 0.2s;
+    }
+    .achievement-locked {
+      filter: grayscale(1); opacity: 0.45;
+      border: 2px solid #999; color: #888;
+      background: #333;
+    }
+    .achievement-unlocked { border: 2px solid #ffd700; background: #ffe06633; color: #ffd700; }
+    .achievement-name { font-size: 18px; }
+    .achievement-row {
+      display: flex; align-items: center; margin: 6px 0 6px 0;
+      background: #19192a; border-radius: 8px; padding: 8px 8px;
+    }
+    #achievements-list { margin-top: 13px; }
+    #start-modal-inner h1 { font-size: 2.2em; letter-spacing: 2px; margin-bottom: 7px; }
+    #start-modal-inner p { color: #fff; margin-bottom: 24px; }
+    #quit-modal-inner h1 { font-size: 2em; color: #ffd700; margin-bottom: 16px; }
+    #quit-modal-inner p  { color: #fff; margin-bottom: 0; }
+  </style>
 </head>
 <body>
-    <h1>snakio.io</h1>
-    <div id="game-container">
-        <canvas id="game-canvas" width="400" height="400"></canvas>
-        <div id="score">Score: 0</div>
-        <button id="gameover-btn">Game Over</button>
-        <div id="controls">
-            <div class="arrows-row">
-                <button class="arrow-btn" id="up-btn">&#8593;</button>
-            </div>
-            <div class="arrows-row">
-                <button class="arrow-btn" id="left-btn">&#8592;</button>
-                <button class="arrow-btn" id="down-btn">&#8595;</button>
-                <button class="arrow-btn" id="right-btn">&#8594;</button>
-            </div>
-        </div>
+  <div id="ui-bar">
+    <span>Level: <b id="level">1</b></span>
+    <span>Coins: <b id="coins">0</b></span>
+    <span>Score: <b id="score">0</b></span>
+  </div>
+  <div id="levelup-msg">Level Up!</div>
+  <div id="achievement-popup"></div>
+  <button id="restart-btn">Restart</button>
+  <button id="shop-btn">Shop 🛒</button>
+  <button id="achievements-btn">🏅 Achievements</button>
+  <div id="howto">
+    <b>Controls:</b> Arrow keys / WASD to move. <br>
+    Eat food <span style="color:gold;">●</span> and collect coins <span style="color:#0ff;">●</span>.<br>
+    Avoid spikes <span style="color:#f33;">▲</span> and yourself!
+  </div>
+  <!-- Shop Modal -->
+  <div id="shop-modal">
+    <div id="shop-modal-inner">
+      <h2>Shop</h2>
+      <div id="shop-items"></div>
+      <div id="shop-skins"></div>
+      <div id="shield-status-shop"></div>
+      <div id="shop-msg"></div>
+      <button id="shop-close-btn">Close</button>
     </div>
-    <button id="open-shop-btn">Open Shop 🛒</button>
-    <div id="shop-modal">
-        <div id="shop-modal-content">
-            <h2>Shop</h2>
-            <div id="shop-coins">Coins: 0</div>
-            <div id="shop-items"></div>
-            <div id="shield-status">Shield: <span id="shield-indicator" style="color:#f44336;">Inactive</span></div>
-            <div id="shop-msg"></div>
-            <button id="close-shop-btn">Close</button>
-        </div>
+  </div>
+  <!-- Achievements Modal -->
+  <div id="achievements-modal">
+    <div id="achievements-modal-inner">
+      <h2>Achievements</h2>
+      <div id="achievements-list"></div>
+      <button id="achievements-close-btn">Close</button>
     </div>
-    <!-- Audio for eating food -->
-    <audio id="eat-sound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4ec9.mp3" preload="auto"></audio>
-    <script>
-    // --- SHOP LOGIC ---
-    const shopItems = [
-      {
-        id: "shield",
-        name: "Shield",
-        desc: "Protects you from one spike hit.",
-        icon: "🛡️",
-        price: 15,
-        type: "powerup"
-      },
-      {
-        id: "destroy-1",
-        name: "Destroy 1 Spike",
-        desc: "Removes a random spike from the map.",
-        icon: "💥",
-        price: 8,
-        type: "action"
-      },
-      {
-        id: "destroy-10",
-        name: "Destroy 10 Spikes",
-        desc: "Removes up to 10 random spikes.",
-        icon: "💣",
-        price: 60,
-        type: "action"
+  </div>
+  <!-- Startup Modal -->
+  <div id="start-modal">
+    <div id="start-modal-inner">
+      <h1>3D Snake.io</h1>
+      <p>Eat, Grow, Shop, Unlock Skins & Achievements!</p>
+      <button id="start-play-btn">Play</button>
+      <button id="start-quit-btn" style="margin-left:22px;">Quit</button>
+    </div>
+  </div>
+  <!-- Quit Modal -->
+  <div id="quit-modal">
+    <div id="quit-modal-inner">
+      <h1>Goodbye!</h1>
+      <p>Thanks for checking out 3D Snake.io.<br>Reload the page to play again.</p>
+      <button id="quit-close-btn">Close</button>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
+  <script>
+  // ====== SKINS DATA ======
+  const skins = [
+    { id: "classic", name: "Classic", price: 0, colors: [0x00FF00, 0x009900] },
+    { id: "blue",    name: "Blue Bolt", price: 70, colors: [0x33aaff, 0x1e63a3] },
+    { id: "fire",    name: "Fire", price: 110, colors: [0xff7f00, 0xff3300] },
+    { id: "purple",  name: "Purple Dream", price: 130, colors: [0xbb33ff, 0x5e2bbf] },
+    { id: "gold",    name: "Golden", price: 300, colors: [0xffee00, 0xf0c800] },
+    { id: "rainbow", name: "Rainbow", price: 650, colors: ["rainbow"] }
+  ];
+  const UNLOCKED_SKINS_KEY = "snakeio_unlocked_skins";
+  const EQUIPPED_SKIN_KEY = "snakeio_equipped_skin";
+  function getUnlockedSkins() { let list = localStorage.getItem(UNLOCKED_SKINS_KEY); if (!list) return ["classic"]; return JSON.parse(list);}
+  function setUnlockedSkins(arr){ localStorage.setItem(UNLOCKED_SKINS_KEY, JSON.stringify(arr));}
+  function unlockSkin(skinId){ let unlocked=getUnlockedSkins(); if(!unlocked.includes(skinId)){unlocked.push(skinId);setUnlockedSkins(unlocked);}}
+  function isSkinUnlocked(skinId){ return getUnlockedSkins().includes(skinId);}
+  function getEquippedSkin(){ let eq=localStorage.getItem(EQUIPPED_SKIN_KEY); if(!eq||!skins.find(s=>s.id===eq)) return "classic"; return eq;}
+  function setEquippedSkin(skinId){ localStorage.setItem(EQUIPPED_SKIN_KEY, skinId);}
+
+  // ====== ACHIEVEMENTS DATA ======
+  const ACHIEVEMENTS_KEY = "snakeio_achievements";
+  const achievementsList = [
+    { id: "food10",    name: "Hungry Snake",     desc: "Eat 10 food.",         icon: "🍏", test: run => run.foodEaten>=10 },
+    { id: "food50",    name: "Gourmet",          desc: "Eat 50 food.",         icon: "🍉", test: run => run.foodEaten>=50 },
+    { id: "coin50",    name: "Collector",        desc: "Collect 50 coins.",    icon: "💰", test: run => run.coinsCollected>=50 },
+    { id: "coin200",   name: "Tycoon",           desc: "Collect 200 coins.",   icon: "👑", test: run => run.coinsCollected>=200 },
+    { id: "shield",    name: "Protected",        desc: "Buy a shield.",        icon: "🛡️", test: run => run.shieldBought },
+    { id: "spike10",   name: "Spike Smasher",    desc: "Destroy 10 spikes.",   icon: "💣", test: run => run.spikesDestroyed>=10 },
+    { id: "lucky7",    name: "Lucky 7",          desc: "Eat 7 food in a row without dying.", icon: "7️⃣", test: run => run.maxFoodCombo>=7 },
+    { id: "survive3",  name: "Survivor",         desc: "Survive for 3 minutes.", icon: "⏳", test: run => run.timeSurvived>=180 },
+    { id: "score250",  name: "High Scorer",      desc: "Reach 250 score.",     icon: "⭐", test: run => run.maxScore>=250 },
+    { id: "skin",      name: "Fashionista",      desc: "Unlock any skin.",     icon: "🎨", test: run => run.skinUnlocked }
+  ];
+  function getAchievementsUnlocked() {
+    let list = localStorage.getItem(ACHIEVEMENTS_KEY);
+    if (!list) return [];
+    return JSON.parse(list);
+  }
+  function setAchievementsUnlocked(arr) {
+    localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(arr));
+  }
+  function unlockAchievement(id) {
+    let unlocked = getAchievementsUnlocked();
+    if (!unlocked.includes(id)) {
+      unlocked.push(id);
+      setAchievementsUnlocked(unlocked);
+      showAchievementPopup(id);
+    }
+  }
+  function isAchievementUnlocked(id) {
+    return getAchievementsUnlocked().includes(id);
+  }
+  function showAchievementPopup(id) {
+    const ach = achievementsList.find(a=>a.id===id);
+    if (!ach) return;
+    let popup = document.getElementById("achievement-popup");
+    popup.innerHTML = `<span class="achievement-badge achievement-unlocked">${ach.icon}</span> Achievement Unlocked: <b>${ach.name}</b>`;
+    popup.style.opacity = 1;
+    setTimeout(()=>popup.style.opacity=0, 2000);
+  }
+
+  // ====== SHOP DATA ======
+  const shopItems = [
+    { id: "shield", name: "Shield", desc: "Protects you from one spike hit.", icon: "🛡️", price: 35, type: "powerup" },
+    { id: "destroy-1", name: "Destroy 1 Spike", desc: "Removes a random spike from the map.", icon: "💥", price: 20, type: "action" },
+    { id: "destroy-10", name: "Destroy 10 Spikes", desc: "Removes up to 10 random spikes.", icon: "💣", price: 110, type: "action" }
+  ];
+  let shieldActive = false;
+
+  // ====== CONFIG ======
+  const GRID = 32, SPACING = 2, INIT_LEN = 7;
+  const LEVEL_THRESHOLDS = [0, 30, 80, 180, 350, 600, 1000, 1600, 2400];
+  const BASE_SPEED = 0.12, SPEED_INC = 0.03, BASE_SPIKES = 8, SPIKES_INC = 3;
+  // ====== GAME STATE ======
+  let scene, camera, renderer;
+  let snake = [], snakeMeshes = [];
+  let dirVec = new THREE.Vector2(0,0), pendingDir = new THREE.Vector2(0,0);
+  let food, foodMesh, coins = 0, coinObjs = [];
+  let spikes = [], spikeMeshes = [];
+  let score = 0, gameOver = false, gameStarted = false, startTime = 0;
+  let moveTimer = 0, speed = BASE_SPEED;
+  let level = 1, pointsPerFood = 1;
+  let levelupTimeout = null;
+  let heldKeys = {};
+  let currentSkin = getEquippedSkin();
+  // Achievement runtime stats
+  let runStats = {
+    foodEaten: 0, coinsCollected: 0, shieldBought: false,
+    spikesDestroyed: 0, maxFoodCombo: 0, foodCombo: 0,
+    maxScore: 0, skinUnlocked: false, timeSurvived: 0
+  };
+
+  // ====== SHOP, SKIN, ACHIEVEMENT UI LOGIC ======
+  const shopBtn = document.getElementById("shop-btn");
+  const shopModal = document.getElementById("shop-modal");
+  const shopItemsDiv = document.getElementById("shop-items");
+  const shopSkinsDiv = document.createElement("div");
+  shopSkinsDiv.id = "shop-skins";
+  const shopMsg = document.getElementById("shop-msg");
+  const shopCloseBtn = document.getElementById("shop-close-btn");
+  const shieldStatusShop = document.getElementById("shield-status-shop");
+  document.getElementById("shop-items").after(shopSkinsDiv);
+
+  shopBtn.onclick = () => { renderShop(); shopModal.style.display = "flex"; };
+  shopCloseBtn.onclick = () => { shopModal.style.display = "none"; shopMsg.textContent = ""; };
+  shopModal.onclick = function(e) { if (e.target === shopModal) { shopModal.style.display = "none"; shopMsg.textContent = ""; } };
+
+  function renderShop() {
+    shopItemsDiv.innerHTML = "";
+    shopMsg.textContent = "";
+    shopItems.forEach(item => {
+      let disabled = false, status = "";
+      if (item.id === "shield" && shieldActive) { disabled = true; status = "Equipped"; }
+      if (coins < item.price) { disabled = true; status = status || "Not enough coins"; }
+      let itemDiv = document.createElement("div");
+      itemDiv.className = "shop-item";
+      itemDiv.innerHTML = `
+        <div class="shop-item-info">
+          <span class="shop-item-name">${item.icon} ${item.name}</span><br>
+          <span class="shop-item-desc">${item.desc}</span>
+        </div>
+        <div>
+          <span class="shop-item-price">${item.price} 🪙</span><br>
+          <button class="shop-buy-btn" ${disabled ? "disabled" : ""}>Buy</button>
+          <div style="font-size:13px;color:${status==="Equipped"?"#0ff":"#f66"}">${status}</div>
+        </div>
+      `;
+      let buyBtn = itemDiv.querySelector('.shop-buy-btn');
+      buyBtn.onclick = () => buyShopItem(item.id);
+      shopItemsDiv.appendChild(itemDiv);
+    });
+    updateShieldShopStatus();
+    renderSkinShop();
+  }
+  function renderSkinShop() {
+    shopSkinsDiv.innerHTML = `<h3 style="color:#ffd700;margin-bottom:5px;margin-top:2px;font-size:21px">Snake Skins</h3>`;
+    let unlocked = getUnlockedSkins();
+    let eq = getEquippedSkin();
+    skins.forEach(skin => {
+      let unlockedThis = unlocked.includes(skin.id);
+      let isEquipped = eq === skin.id;
+      let status = unlockedThis ? (isEquipped ? "Equipped" : "Unlocked") : "Locked";
+      let itemDiv = document.createElement("div");
+      itemDiv.className = "skin-item";
+      let colorHtml;
+      if (skin.colors[0] === "rainbow") {
+        colorHtml = `<span class="skin-sample" style="background: linear-gradient(90deg, #f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);"></span>`;
+      } else {
+        colorHtml = `<span class="skin-sample${isEquipped ? " skin-current" : ""}" style="background: linear-gradient(90deg, #${skin.colors[0].toString(16).padStart(6,"0")}, #${skin.colors[1].toString(16).padStart(6,"0")});"></span>`;
       }
-    ];
+      let btnHtml = "";
+      if (unlockedThis) {
+        if (isEquipped) btnHtml = `<button class="skin-equip-btn" disabled>Equipped</button>`;
+        else btnHtml = `<button class="skin-equip-btn">Equip</button>`;
+      } else {
+        btnHtml = `<button class="skin-buy-btn"${coins<skin.price?" disabled":""}>Buy<br>${skin.price} 🪙</button>`;
+      }
+      itemDiv.innerHTML = `
+        <div class="skin-item-info">
+          ${colorHtml}
+          <span class="skin-item-name">${skin.name}</span>
+          <div class="skin-item-desc">${skin.id==="classic"?"Default green snake":skin.id==="rainbow"?"Animated rainbow!":"A stylish look."}</div>
+        </div>
+        <div>
+          ${btnHtml}
+          <div style="font-size:14px;color:${isEquipped?"#0ff":unlockedThis?"#39f":"#f66"}">${status}</div>
+        </div>
+      `;
+      if (unlockedThis) {
+        let equipBtn = itemDiv.querySelector('.skin-equip-btn');
+        if (equipBtn && !isEquipped) equipBtn.onclick = () => { equipSkin(skin.id); };
+      } else {
+        let buyBtn = itemDiv.querySelector('.skin-buy-btn');
+        if (buyBtn && coins>=skin.price) buyBtn.onclick = () => buySkin(skin.id);
+      }
+      shopSkinsDiv.appendChild(itemDiv);
+    });
+  }
+  function updateShieldShopStatus() {
+    shieldStatusShop.textContent = "Shield: " + (shieldActive ? "Active" : "Inactive");
+    shieldStatusShop.style.color = shieldActive ? "#00e7ff" : "#ffd700";
+  }
+  function showShopMsg(msg, color="#0f0") {
+    shopMsg.textContent = msg;
+    shopMsg.style.color = color;
+    setTimeout(() => {shopMsg.textContent = "";}, 1800);
+  }
+  function buyShopItem(itemId) {
+    const item = shopItems.find(i=>i.id===itemId);
+    if (!item) return;
+    if (coins < item.price) { showShopMsg("Not enough coins!", "#f66"); return; }
+    if (itemId === "shield") {
+      if (shieldActive) { showShopMsg("Shield already active!", "#0ff"); return; }
+      shieldActive = true;
+      coins -= item.price;
+      runStats.shieldBought = true;
+      updateUI();
+      updateShieldShopStatus();
+      showShopMsg("Shield equipped!");
+      checkAchievements();
+    }
+    else if (itemId === "destroy-1") {
+      if (spikes.length === 0) { showShopMsg("No spikes to destroy", "#f66"); return; }
+      let idx = Math.floor(Math.random() * spikes.length);
+      spikes.splice(idx, 1);
+      runStats.spikesDestroyed += 1;
+      coins -= item.price;
+      updateUI();
+      showShopMsg("Destroyed 1 spike!");
+      checkAchievements();
+    }
+    else if (itemId === "destroy-10") {
+      if (spikes.length === 0) { showShopMsg("No spikes to destroy", "#f66"); return; }
+      let removeCount = Math.min(10, spikes.length);
+      for (let i = 0; i < removeCount; i++) {
+        let idx = Math.floor(Math.random() * spikes.length);
+        spikes.splice(idx, 1);
+        runStats.spikesDestroyed += 1;
+      }
+      coins -= item.price;
+      updateUI();
+      showShopMsg("Destroyed 10 spikes!");
+      checkAchievements();
+    }
+    renderShop();
+    drawSpikes();
+  }
+  function buySkin(skinId) {
+    const skin = skins.find(s=>s.id===skinId);
+    if (!skin) return;
+    if (isSkinUnlocked(skinId)) { showShopMsg("Already unlocked!", "#0ff"); return; }
+    if (coins < skin.price) { showShopMsg("Not enough coins!", "#f66"); return; }
+    coins -= skin.price;
+    unlockSkin(skinId);
+    runStats.skinUnlocked = true;
+    updateUI();
+    equipSkin(skinId);
+    showShopMsg("Unlocked & equipped!");
+    checkAchievements();
+    renderShop();
+  }
+  function equipSkin(skinId) {
+    if (!isSkinUnlocked(skinId)) return;
+    setEquippedSkin(skinId);
+    currentSkin = skinId;
+    renderShop();
+    drawSnake();
+  }
 
-    // Persistent coins
-    function getCoins() {
-        return parseInt(localStorage.getItem('snake_coins') || "0");
-    }
-    function setCoins(val) {
-        localStorage.setItem('snake_coins', val);
-        updateShopCoinsUI();
-    }
-    function addCoins(val) {
-        setCoins(getCoins() + val);
-    }
+  // ====== ACHIEVEMENT MODAL LOGIC ======
+  const achievementsBtn = document.getElementById("achievements-btn");
+  const achievementsModal = document.getElementById("achievements-modal");
+  const achievementsListDiv = document.getElementById("achievements-list");
+  const achievementsCloseBtn = document.getElementById("achievements-close-btn");
+  achievementsBtn.onclick = () => { renderAchievements(); achievementsModal.style.display = "flex"; };
+  achievementsCloseBtn.onclick = () => { achievementsModal.style.display = "none"; };
+  achievementsModal.onclick = function(e) { if (e.target === achievementsModal) { achievementsModal.style.display = "none"; } };
+  function renderAchievements() {
+    achievementsListDiv.innerHTML = "";
+    let unlocked = getAchievementsUnlocked();
+    achievementsList.forEach(a => {
+      let isUnlocked = unlocked.includes(a.id);
+      let row = document.createElement("div");
+      row.className = "achievement-row";
+      row.innerHTML = `
+        <span class="achievement-badge ${isUnlocked ? 'achievement-unlocked':'achievement-locked'}">${a.icon}</span>
+        <div>
+          <div class="achievement-name">${a.name}</div>
+          <div class="achievement-desc">${a.desc}</div>
+        </div>
+      `;
+      achievementsListDiv.appendChild(row);
+    });
+  }
 
-    const openShopBtn = document.getElementById("open-shop-btn");
-    const shopModal = document.getElementById("shop-modal");
-    const shopModalContent = document.getElementById("shop-modal-content");
-    const closeShopBtn = document.getElementById("close-shop-btn");
-    const shopItemsDiv = document.getElementById("shop-items");
-    const shopCoinsDiv = document.getElementById("shop-coins");
-    const shopMsg = document.getElementById("shop-msg");
-    const shieldStatus = document.getElementById('shield-indicator');
+  // ====== STARTUP & QUIT MODALS ======
+  function showStartScreen() {
+    document.getElementById("start-modal").style.display = "flex";
+    gameStarted = false;
+    // Hide UI and controls
+    document.getElementById("ui-bar").style.display = "none";
+    document.getElementById("shop-btn").style.display = "none";
+    document.getElementById("achievements-btn").style.display = "none";
+    document.getElementById("howto").style.display = "none";
+    document.getElementById("restart-btn").style.display = "none";
+  }
+  function hideStartScreen() {
+    document.getElementById("start-modal").style.display = "none";
+    gameStarted = true;
+    document.getElementById("ui-bar").style.display = "";
+    document.getElementById("shop-btn").style.display = "";
+    document.getElementById("achievements-btn").style.display = "";
+    document.getElementById("howto").style.display = "";
+    document.getElementById("restart-btn").style.display = "none";
+    startTime = Date.now();
+    runStats = { foodEaten:0, coinsCollected:0, shieldBought:false, spikesDestroyed:0, maxFoodCombo:0, foodCombo:0, maxScore:0, skinUnlocked:false, timeSurvived:0 };
+    resetGame();
+  }
+  document.getElementById("start-play-btn").onclick = hideStartScreen;
+  document.getElementById("start-quit-btn").onclick = function() {
+    document.getElementById("start-modal").style.display = "none";
+    document.getElementById("quit-modal").style.display = "flex";
+  };
+  document.getElementById("quit-close-btn").onclick = function() {
+    document.getElementById("quit-modal").style.display = "none";
+  };
 
-    let shieldActive = false;
+  // ====== INIT ======
+  function setupScene() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(65, window.innerWidth/window.innerHeight, 0.1, 220);
+    camera.position.set(0, 38, 44);
+    camera.lookAt(0, 0, 0);
+    renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    // Arena
+    let arenaGeom = new THREE.PlaneGeometry(GRID*SPACING, GRID*SPACING);
+    let arenaMat = new THREE.MeshPhongMaterial({color:0x232323, side:THREE.DoubleSide});
+    let arena = new THREE.Mesh(arenaGeom, arenaMat);
+    arena.rotation.x = -Math.PI/2;
+    scene.add(arena);
+    // Lighting
+    scene.add(new THREE.AmbientLight(0xffffff, 0.57));
+    let dir = new THREE.DirectionalLight(0xffffff, 0.6);
+    dir.position.set(8, 32, 10); scene.add(dir);
+  }
 
-    openShopBtn.onclick = () => {
-        renderShop();
-        shopModal.style.display = "flex";
+  function resetSnake() {
+    for(let m of snakeMeshes) scene.remove(m);
+    snake = []; snakeMeshes = [];
+    let sx = 0, sz = 0;
+    for(let i=0; i<INIT_LEN; ++i) {
+      let pos = {x:sx-i, z:sz};
+      snake.push(pos);
     }
-    closeShopBtn.onclick = () => {
-        shopModal.style.display = "none";
-        shopMsg.textContent = "";
+    dirVec.set(0,0);
+    pendingDir.set(0,0);
+    heldKeys = {};
+    shieldActive = false;
+    currentSkin = getEquippedSkin();
+    updateShieldShopStatus();
+    drawSnake();
+  }
+  function drawSnake() {
+    for(let m of snakeMeshes) scene.remove(m);
+    snakeMeshes=[];
+    let skin = skins.find(s=>s.id===currentSkin) || skins[0];
+    for(let i=0; i<snake.length; ++i) {
+      let color;
+      if(skin.colors[0]==="rainbow") {
+        let h = (i*35 + Date.now()/12) % 360;
+        color = new THREE.Color("hsl("+h+",95%,55%)");
+      } else {
+        let c = (i===0)?skin.colors[0]:skin.colors[1];
+        color = new THREE.Color(c);
+      }
+      let mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(1.6, 1.6, 1.6),
+        new THREE.MeshPhongMaterial({color: color})
+      );
+      mesh.position.set(snake[i].x*SPACING, 0.8, snake[i].z*SPACING);
+      scene.add(mesh);
+      snakeMeshes.push(mesh);
     }
-    shopModal.onclick = function(e) {
-        if (e.target === shopModal) {
-            shopModal.style.display = "none";
-            shopMsg.textContent = "";
-        }
+  }
+  function placeFood() {
+    if(foodMesh) scene.remove(foodMesh);
+    let pos;
+    do {
+      pos = {
+        x: Math.floor(Math.random()*GRID-GRID/2),
+        z: Math.floor(Math.random()*GRID-GRID/2)
+      };
+    } while(
+      snake.some(s=>s.x===pos.x && s.z===pos.z) ||
+      spikes.some(sp=>sp.x===pos.x && sp.z===pos.z) ||
+      coinObjs.some(c=>c.x===pos.x && c.z===pos.z)
+    );
+    food = pos;
+    foodMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(1,16,16),
+      new THREE.MeshPhongMaterial({color:0xffdd00, emissive:0x222200})
+    );
+    foodMesh.position.set(food.x*SPACING, 1.1, food.z*SPACING);
+    scene.add(foodMesh);
+  }
+  function drawSpikes() {
+    for(let m of spikeMeshes) scene.remove(m);
+    spikeMeshes = [];
+    for(let i=0; i<spikes.length; ++i) {
+      let pos = spikes[i];
+      let mesh = new THREE.Mesh(
+        new THREE.ConeGeometry(0.85,2.2,12),
+        new THREE.MeshPhongMaterial({color:0xdd2222,emissive:0x330000})
+      );
+      mesh.position.set(pos.x*SPACING, 1.1, pos.z*SPACING);
+      scene.add(mesh);
+      spikeMeshes.push(mesh);
     }
-    function updateShopCoinsUI() {
-        shopCoinsDiv.textContent = "Coins: " + getCoins();
-    }
-    function renderShop() {
-        updateShopCoinsUI();
-        shopItemsDiv.innerHTML = "";
-        shopItems.forEach(item => {
-            // Determine if item is available
-            let disabled = false;
-            let owned = false;
-            let status = "";
-            if (item.id === "shield" && shieldActive) {
-                disabled = true;
-                owned = true;
-                status = "Equipped";
-            }
-            if (getCoins() < item.price) {
-                disabled = true;
-                status = status || "Not enough coins";
-            }
-            // Build item UI
-            const btn = document.createElement("button");
-            btn.className = "shop-btn";
-            btn.disabled = disabled;
-            btn.innerHTML = `<span style="font-size:26px;vertical-align:middle;">${item.icon}</span> 
-                <b>${item.name}</b> - ${item.price} <span style="color:#ffd700;">🪙</span><br>
-                <span style="font-size:15px;color:#ffe066">${item.desc}</span>
-                <br><span style="font-size:14px;color:${owned?'#0ff':'#f66'}">${status}</span>`;
-            btn.onclick = () => buyShopItem(item.id);
-            shopItemsDiv.appendChild(btn);
-        });
-        setShieldUI(shieldActive);
-    }
-    function showShopMsg(msg, color="#0f0") {
-        shopMsg.textContent = msg;
-        shopMsg.style.color = color;
-        setTimeout(() => {shopMsg.textContent = "";}, 1600);
-    }
-    function setShieldUI(active) {
-        shieldStatus.textContent = active ? "Active" : "Inactive";
-        shieldStatus.style.color = active ? "#00e7ff" : "#f44336";
-    }
-    function updateShopButtons() {
-        // No-op for modal version; handled on modal open/render
-    }
-    function buyShopItem(itemId) {
-        const coins = getCoins();
-        const item = shopItems.find(i=>i.id===itemId);
-        if (!item) return;
-        if (coins < item.price) {
-            showShopMsg("Not enough coins!", "#f66");
-            return;
-        }
-        if (itemId === "shield") {
-            if (shieldActive) {
-                showShopMsg("Shield already active!", "#0ff");
-                return;
-            }
-            shieldActive = true;
-            setCoins(coins - item.price);
-            setShieldUI(true);
-            showShopMsg("Shield equipped!");
-        } else if (itemId === "destroy-1") {
-            if (spikes.length === 0) {
-                showShopMsg("No spikes to destroy", "#f66");
-                return;
-            }
-            let idx = Math.floor(Math.random() * spikes.length);
-            spikes.splice(idx, 1);
-            setCoins(coins - item.price);
-            showShopMsg("Destroyed 1 spike!");
-        } else if (itemId === "destroy-10") {
-            if (spikes.length === 0) {
-                showShopMsg("No spikes to destroy", "#f66");
-                return;
-            }
-            let removeCount = Math.min(10, spikes.length);
-            for (let i = 0; i < removeCount; i++) {
-                let idx = Math.floor(Math.random() * spikes.length);
-                spikes.splice(idx, 1);
-            }
-            setCoins(coins - item.price);
-            showShopMsg("Destroyed 10 spikes!");
-        }
-        renderShop();
-        draw();
-    }
-
-    // --- SNAKE GAME LOGIC ---
-
-    const canvas = document.getElementById('game-canvas');
-    const ctx = canvas.getContext('2d');
-    const scoreDiv = document.getElementById('score');
-    const gameoverBtn = document.getElementById('gameover-btn');
-    const upBtn = document.getElementById('up-btn');
-    const downBtn = document.getElementById('down-btn');
-    const leftBtn = document.getElementById('left-btn');
-    const rightBtn = document.getElementById('right-btn');
-    const eatSound = document.getElementById('eat-sound');
-
-    const gridSize = 20;
-    const canvasSize = 400;
-    let snake, direction, food, score, gameOver, gameInterval;
-    let heldDirection = null;
-    let directionLocked = false;
-    let spikes = [];
-    const SPIKE_COUNT = 10;
-
-    function randomGridPosition() {
-        return {
-            x: Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize,
-            y: Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize
+  }
+  function placeSpikes(num) {
+    spikes = [];
+    for(let i=0; i<num; ++i) {
+      let pos;
+      do {
+        pos = {
+          x: Math.floor(Math.random()*GRID-GRID/2),
+          z: Math.floor(Math.random()*GRID-GRID/2)
         };
+      } while(
+        snake.some(s=>s.x===pos.x && s.z===pos.z) ||
+        spikes.some(sp=>sp.x===pos.x && sp.z===pos.z) ||
+        (food && food.x===pos.x && food.z===pos.z) ||
+        coinObjs.some(c=>c.x===pos.x && c.z===pos.z)
+      );
+      spikes.push(pos);
     }
-
-    function placeFood() {
-        let valid = false;
-        let newFood;
-        while (!valid) {
-            newFood = randomGridPosition();
-            valid = (
-                !snake.some(seg => seg.x === newFood.x && seg.y === newFood.y) &&
-                !spikes.some(sp => sp.x === newFood.x && sp.y === newFood.y)
-            );
-        }
-        food = newFood;
+    drawSpikes();
+  }
+  function placeCoins(num=3) {
+    for(let c of coinObjs) scene.remove(c.mesh);
+    coinObjs = [];
+    for(let i=0; i<num; ++i) {
+      let pos;
+      do {
+        pos = {
+          x: Math.floor(Math.random()*GRID-GRID/2),
+          z: Math.floor(Math.random()*GRID-GRID/2)
+        };
+      } while(
+        snake.some(s=>s.x===pos.x && s.z===pos.z) ||
+        spikes.some(sp=>sp.x===pos.x && sp.z===pos.z) ||
+        (food && food.x===pos.x && food.z===pos.z) ||
+        coinObjs.some(c=>c.x===pos.x && c.z===pos.z)
+      );
+      let mesh = new THREE.Mesh(
+        new THREE.SphereGeometry(0.6, 14, 14),
+        new THREE.MeshPhongMaterial({color:0x00ffff, emissive:0x222244})
+      );
+      mesh.position.set(pos.x*SPACING, 1.25, pos.z*SPACING);
+      scene.add(mesh);
+      coinObjs.push({x:pos.x, z:pos.z, mesh});
     }
-
-    function placeSpikes() {
-        spikes = [];
-        while (spikes.length < SPIKE_COUNT) {
-            let pos = randomGridPosition();
-            if (
-                !snake.some(seg => seg.x === pos.x && seg.y === pos.y) &&
-                (!food || (food.x !== pos.x || food.y !== pos.y)) &&
-                !spikes.some(sp => sp.x === pos.x && sp.y === pos.y)
-            ) {
-                spikes.push(pos);
-            }
-        }
+  }
+  function updateUI() {
+    document.getElementById('score').textContent = score;
+    document.getElementById('coins').textContent = coins;
+    document.getElementById('level').textContent = level;
+  }
+  function getLevelForCoins(coins) {
+    for(let i=LEVEL_THRESHOLDS.length-1; i>=0; i--) {
+      if(coins >= LEVEL_THRESHOLDS[i]) return i+1;
     }
-
-    function initGame() {
-        snake = [
-            {x: 5 * gridSize, y: 5 * gridSize},
-            {x: 4 * gridSize, y: 5 * gridSize},
-            {x: 3 * gridSize, y: 5 * gridSize}
-        ];
-        direction = {x: 0, y: 0}; // Not moving at start
-        score = 0;
-        gameOver = false;
-        shieldActive = false;
-        scoreDiv.textContent = "Score: 0";
-        setShieldUI(false);
-        placeSpikes();
-        placeFood();
-        if (gameInterval) clearInterval(gameInterval);
-        gameInterval = setInterval(gameLoop, 100);
-        draw();
+    return 1;
+  }
+  function getPointsPerFood(level) {
+    return 1 + (level-1)*2;
+  }
+  function getSpeedForLevel(level) {
+    return BASE_SPEED + (level-1)*SPEED_INC;
+  }
+  function getSpikesForLevel(level) {
+    return BASE_SPIKES + (level-1)*SPIKES_INC;
+  }
+  function showLevelUpMsg() {
+    const msg = document.getElementById('levelup-msg');
+    msg.style.opacity = 1;
+    clearTimeout(levelupTimeout);
+    levelupTimeout = setTimeout(()=>{msg.style.opacity = 0;}, 1500);
+  }
+  function levelUpIfNeeded() {
+    let newLevel = getLevelForCoins(coins);
+    if(newLevel !== level) {
+      level = newLevel;
+      pointsPerFood = getPointsPerFood(level);
+      speed = getSpeedForLevel(level);
+      placeSpikes(getSpikesForLevel(level));
+      placeCoins(Math.min(3+level, 10));
+      showLevelUpMsg();
     }
+  }
+  function resetGame() {
+    score = 0; coins = 0; level = 1; pointsPerFood = getPointsPerFood(level); speed = getSpeedForLevel(level);
+    moveTimer = 0; gameOver = false;
+    document.getElementById('restart-btn').style.display = "none";
+    resetSnake();
+    placeFood();
+    placeSpikes(getSpikesForLevel(level));
+    placeCoins(Math.min(3+level, 10));
+    updateUI();
+    runStats.foodEaten = 0; runStats.coinsCollected = 0; runStats.foodCombo = 0; runStats.maxFoodCombo = 0;
+    runStats.maxScore = 0; runStats.shieldBought = false; runStats.spikesDestroyed = 0; runStats.skinUnlocked = false;
+    runStats.timeSurvived = 0;
+    startTime = Date.now();
+  }
+  // ====== ACHIEVEMENT CHECKING ======
+  function checkAchievements() {
+    runStats.maxScore = Math.max(runStats.maxScore, score);
+    runStats.timeSurvived = Math.floor((Date.now()-startTime)/1000);
+    // Unlock if test passes and not unlocked yet
+    achievementsList.forEach(a => {
+      if (!isAchievementUnlocked(a.id) && a.test(runStats)) unlockAchievement(a.id);
+    });
+  }
 
-    function drawSpike(spike) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(spike.x + gridSize/2, spike.y + 3);
-        ctx.lineTo(spike.x + 3, spike.y + gridSize-3);
-        ctx.lineTo(spike.x + gridSize-3, spike.y + gridSize-3);
-        ctx.closePath();
-        ctx.fillStyle = "#c62828";
-        ctx.fill();
-        ctx.strokeStyle = "#fff";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.restore();
-    }
-
-    function draw() {
-        ctx.clearRect(0, 0, canvasSize, canvasSize);
-
-        for (const spike of spikes) {
-            drawSpike(spike);
-        }
-
-        ctx.fillStyle = "#00FF00";
-        snake.forEach((segment, idx) => {
-            ctx.fillRect(segment.x, segment.y, gridSize, gridSize);
-            if (idx === 0) {
-                ctx.fillStyle = "#fff";
-                ctx.fillRect(segment.x + 4, segment.y + 4, 4, 4);
-                ctx.fillRect(segment.x + 12, segment.y + 4, 4, 4);
-                ctx.fillStyle = "#00FF00";
-            }
-        });
-
-        ctx.fillStyle = "#FFD700";
-        ctx.fillRect(food.x, food.y, gridSize, gridSize);
-
+  // ====== GAME LOOP ======
+  function animate(ts) {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+    if(!gameStarted) return;
+    if(gameOver) return;
+    runStats.timeSurvived = Math.floor((Date.now()-startTime)/1000);
+    checkAchievements();
+    if (dirVec.lengthSq() === 0) { drawSnake(); return; }
+    moveTimer += speed;
+    if(moveTimer >= 1) {
+      moveTimer = 0;
+      if (!isMovementKeyHeld()) { dirVec.set(0,0); pendingDir.set(0,0); drawSnake(); return; }
+      dirVec.copy(pendingDir);
+      let nx = snake[0].x + dirVec.x, nz = snake[0].z + dirVec.y;
+      if (nx > GRID/2) nx = -GRID/2;
+      if (nx < -GRID/2) nx = GRID/2;
+      if (nz > GRID/2) nz = -GRID/2;
+      if (nz < -GRID/2) nz = GRID/2;
+      if (snake.some(s=>s.x===nx && s.z===nz)) { endGame("You hit yourself!"); return; }
+      let spikeIdx = spikes.findIndex(sp=>sp.x===nx && sp.z===nz);
+      if (spikeIdx !== -1) {
         if (shieldActive) {
-            ctx.save();
-            ctx.strokeStyle = "#00e7ff";
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.arc(snake[0].x + gridSize / 2, snake[0].y + gridSize / 2, gridSize / 2 + 2, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.restore();
-        }
-
-        if (gameOver) {
-            ctx.fillStyle = "#fff";
-            ctx.font = "36px Arial";
-            ctx.textAlign = "center";
-            ctx.fillText("Game Over!", canvasSize / 2, canvasSize / 2);
-        }
-    }
-
-    function moveSnake() {
-        if (!direction || (direction.x === 0 && direction.y === 0)) {
-            return;
-        }
-
-        let newHead = {
-            x: snake[0].x + direction.x,
-            y: snake[0].y + direction.y
-        };
-
-        if (newHead.x < 0) newHead.x = canvasSize - gridSize;
-        if (newHead.x >= canvasSize) newHead.x = 0;
-        if (newHead.y < 0) newHead.y = canvasSize - gridSize;
-        if (newHead.y >= canvasSize) newHead.y = 0;
-
-        let hitSpikeIdx = spikes.findIndex(sp => sp.x === newHead.x && sp.y === newHead.y);
-        if (hitSpikeIdx !== -1) {
-            if (shieldActive) {
-                spikes.splice(hitSpikeIdx, 1);
-                shieldActive = false;
-                setShieldUI(false);
-                showShopMsg('Your shield saved you!');
-            } else {
-                endGame();
-                return;
-            }
-        }
-
-        snake.unshift(newHead);
-
-        if (newHead.x === food.x && newHead.y === food.y) {
-            score++;
-            scoreDiv.textContent = "Score: " + score;
-            eatSound.currentTime = 0;
-            eatSound.play();
-            addCoins(2); // 2 coins per food
-            placeFood();
+          shieldActive = false;
+          updateShieldShopStatus();
+          spikes.splice(spikeIdx, 1);
+          showShopMsg("Shield saved you! Spike destroyed.", "#0ff");
+          runStats.spikesDestroyed += 1;
+          drawSpikes();
+          checkAchievements();
         } else {
-            snake.pop();
+          endGame("You hit a spike!");
+          return;
         }
-    }
+      }
+      snake.unshift({x:nx, z:nz});
+      if (food.x===nx && food.z===nz) {
+        score += pointsPerFood;
+        runStats.foodEaten += 1;
+        runStats.foodCombo += 1;
+        runStats.maxFoodCombo = Math.max(runStats.maxFoodCombo, runStats.foodCombo);
+        updateUI();
+        placeFood();
+        levelUpIfNeeded();
+        checkAchievements();
+      } else {
+        snake.pop();
+        runStats.foodCombo = 0;
+      }
+      let coinIdx = coinObjs.findIndex(c=>c.x===nx && c.z===nz);
+      if(coinIdx !== -1) {
+        coins += 5*level;
+        runStats.coinsCollected += 5*level;
+        updateUI();
+        scene.remove(coinObjs[coinIdx].mesh);
+        coinObjs.splice(coinIdx,1);
+        placeCoins(1);
+        levelUpIfNeeded();
+        checkAchievements();
+      }
+      drawSnake();
+    } else { drawSnake(); }
+  }
+  function endGame(msg) {
+    gameOver = true;
+    document.getElementById('levelup-msg').textContent = msg + " Game Over!";
+    document.getElementById('levelup-msg').style.opacity = 1;
+    document.getElementById('restart-btn').style.display = "block";
+    checkAchievements();
+  }
 
-    function gameLoop() {
-        if (gameOver) {
-            draw();
-            return;
-        }
-        moveSnake();
-        draw();
-    }
+  // ====== KEYBOARD MOVEMENT CONTROL ======
+  function isMovementKeyHeld() {
+    return heldKeys["ArrowUp"] || heldKeys["w"] ||
+           heldKeys["ArrowDown"] || heldKeys["s"] ||
+           heldKeys["ArrowLeft"] || heldKeys["a"] ||
+           heldKeys["ArrowRight"] || heldKeys["d"];
+  }
+  window.addEventListener('keydown', e => {
+    let k = e.key; let lower = k.toLowerCase();
+    if (!gameStarted || gameOver) return;
+    if (lower==="arrowup"||lower==="w") { if(dirVec.y!==1) pendingDir.set(0,-1); if(dirVec.lengthSq()===0) dirVec.set(0,-1);}
+    else if (lower==="arrowdown"||lower==="s") { if(dirVec.y!==-1) pendingDir.set(0,1); if(dirVec.lengthSq()===0) dirVec.set(0,1);}
+    else if (lower==="arrowleft"||lower==="a") { if(dirVec.x!==1) pendingDir.set(-1,0); if(dirVec.lengthSq()===0) dirVec.set(-1,0);}
+    else if (lower==="arrowright"||lower==="d") { if(dirVec.x!==-1) pendingDir.set(1,0); if(dirVec.lengthSq()===0) dirVec.set(1,0);}
+    else if (lower==="r" && gameOver) { hideStartScreen(); }
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(k)) heldKeys[k] = true;
+    if(['w','a','s','d'].includes(lower)) heldKeys[lower] = true;
+  });
+  window.addEventListener('keyup', e => {
+    let k = e.key, lower = k.toLowerCase();
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(k)) heldKeys[k] = false;
+    if(['w','a','s','d'].includes(lower)) heldKeys[lower] = false;
+    if (!isMovementKeyHeld()) { dirVec.set(0,0); pendingDir.set(0,0); }
+  });
+  document.getElementById('restart-btn').onclick = hideStartScreen;
+  window.addEventListener('resize', ()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 
-    function endGame() {
-        gameOver = true;
-        clearInterval(gameInterval);
-        releaseHeldDirection();
-        draw();
-    }
-
-    function setHeldDirection(newDir) {
-        if (gameOver) return;
-        if (directionLocked) return;
-        heldDirection = newDir;
-        direction = newDir;
-        directionLocked = true;
-    }
-    function releaseHeldDirection() {
-        heldDirection = null;
-        direction = {x: 0, y: 0};
-        directionLocked = false;
-    }
-
-    upBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: 0, y: -gridSize}); });
-    upBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
-    downBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: 0, y: gridSize}); });
-    downBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
-    leftBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: -gridSize, y: 0}); });
-    leftBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
-    rightBtn.addEventListener('touchstart', e => { e.preventDefault(); setHeldDirection({x: gridSize, y: 0}); });
-    rightBtn.addEventListener('touchend', e => { e.preventDefault(); releaseHeldDirection(); });
-
-    upBtn.addEventListener('mousedown', e => { setHeldDirection({x: 0, y: -gridSize}); });
-    upBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
-    upBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
-    downBtn.addEventListener('mousedown', e => { setHeldDirection({x: 0, y: gridSize}); });
-    downBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
-    downBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
-    leftBtn.addEventListener('mousedown', e => { setHeldDirection({x: -gridSize, y: 0}); });
-    leftBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
-    leftBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
-    rightBtn.addEventListener('mousedown', e => { setHeldDirection({x: gridSize, y: 0}); });
-    rightBtn.addEventListener('mouseup', e => { releaseHeldDirection(); });
-    rightBtn.addEventListener('mouseleave', e => { releaseHeldDirection(); });
-
-    window.addEventListener('keydown', e => {
-        if (gameOver) return;
-        let key = e.key.toLowerCase();
-        let newDir = null;
-        if ((key === "arrowup" || key === "w")) newDir = {x: 0, y: -gridSize};
-        else if ((key === "arrowdown" || key === "s")) newDir = {x: 0, y: gridSize};
-        else if ((key === "arrowleft" || key === "a")) newDir = {x: -gridSize, y: 0};
-        else if ((key === "arrowright" || key === "d")) newDir = {x: gridSize, y: 0};
-        if (newDir) setHeldDirection(newDir);
-    });
-    window.addEventListener('keyup', e => {
-        let key = e.key.toLowerCase();
-        if (
-            key === "arrowup" || key === "w" ||
-            key === "arrowdown" || key === "s" ||
-            key === "arrowleft" || key === "a" ||
-            key === "arrowright" || key === "d"
-        ) {
-            releaseHeldDirection();
-        }
-    });
-
-    gameoverBtn.addEventListener('click', () => {
-        if (!gameOver) {
-            endGame();
-        }
-    });
-
-    // Start game
-    initGame();
-    </script>
+  // ====== BOOT ======
+  setupScene();
+  showStartScreen();
+  animate();
+  </script>
 </body>
 </html>
-
-<div id="level" style="font-size:20px;margin-top:8px;color:#ffd700;">Level: 1</div>
