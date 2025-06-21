@@ -215,3 +215,7 @@ questProgress = 0;
 questProgressSpan.textContent = questProgress;
 questRewardSpan.style.display = 'none';
 setupDaily();
+
+const game = zip.folder("game");
+game.file("index.html", "<html>...</html>");
+game.file("assets/logo.png", someBinaryData);
