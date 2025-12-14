@@ -865,47 +865,4 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Download snakio app</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-</head>
-<body>
-  <h1>My Game</h1>
-  <button onclick="downloadZip()">Download snakio</button>
-
-  <script>
-    function downloadZip() {
-      const zip = new JSZip();
-
-      // Add your app's files here manually:
-      zip.file("index.html", `
-        <!DOCTYPE html>
-        <html>
-        <head><title>My Game</title></head>
-        <body><h1>Welcome to My Game!</h1></body>
-        </html>
-      `);
-
-      zip.file("style.css", `
-        body { background: black; color: lime; font-family: sans-serif; }
-      `);
-
-      zip.file("script.js", `
-        console.log("Game loaded!");
-      `);
-
-      // Generate ZIP and download it
-      zip.generateAsync({ type: "blob" }).then(function(content) {
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(content);
-        a.download = "MyGame.zip";
-        a.click();
-      });
-    }
-  </script>
-</body>
-</html>
+    
